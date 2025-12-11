@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>光的反射 - 40题专项训练</title>
+<title>光的反射 - 40题专项突破</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px}
@@ -14,12 +14,12 @@ body{font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(1
 .progress-container{background:rgba(255,255,255,0.2);height:8px;border-radius:4px;margin-top:15px;overflow:hidden}
 .progress-bar{height:100%;background:#4ade80;transition:width 0.3s ease;border-radius:4px}
 .question-area{padding:40px}
-.question-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.question-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap}
 .question-number{font-size:18px;color:#667eea;font-weight:bold}
 .question-type{padding:6px 16px;border-radius:20px;font-size:14px;font-weight:bold}
 .type-choice{background:#dbeafe;color:#1e40af}
 .type-cloze{background:#fce7f3;color:#9f1239}
-.question-stem{font-size:18px;line-height:1.8;margin-bottom:25px;color:#1f2937}
+.question-stem{font-size:18px;line-height:1.8;margin-bottom:25px;color:#1f2937;padding:15px;background:#f9fafb;border-radius:10px;border-left:4px solid #667eea}
 .blank{display:inline-block;min-width:120px;border-bottom:2px solid #667eea;padding:2px 10px;margin:0 5px;text-align:center;color:#667eea;font-weight:bold;min-height:24px;vertical-align:bottom}
 .blank.filled{background:#e0e7ff;border-radius:4px}
 .blank.drop-over{background:#c7d2fe;transform:scale(1.05)}
@@ -59,7 +59,7 @@ body{font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(1
 <body>
 <div class="container">
 <div class="header">
-<h1>光的反射 - 40题专项训练</h1>
+<h1>💡 光的反射 - 40题专项突破</h1>
 <div class="meta">第 <span id="current-question">1</span> / <span id="total-questions">40</span> 题</div>
 <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
 </div>
@@ -73,80 +73,79 @@ body{font-family:"Microsoft YaHei",Arial,sans-serif;background:linear-gradient(1
 <div id="cloze-area" style="display:none">
 <div class="word-pool" id="word-pool"></div>
 <div class="cloze-controls">
-<button class="btn btn-primary" id="submit-cloze">提交答案</button>
-<button class="btn btn-secondary" id="reset-cloze">重置本题</button>
+<button class="btn btn-primary" id="submit-cloze">✓ 提交答案</button>
+<button class="btn btn-secondary" id="reset-cloze">↻ 重置本题</button>
 </div>
 </div>
 <div class="feedback" id="feedback"></div>
 </div>
 <div class="teacher-panel">
 <button class="teacher-toggle" id="teacher-toggle">
-<span id="toggle-icon">▶</span> 教师视角
+<span id="toggle-icon">▶</span> 📖 教师视角
 </button>
 <div class="teacher-content" id="teacher-content">
-<div class="teacher-item"><strong>考查知识点：</strong><span id="teacher-knowledge"></span></div>
-<div class="teacher-item"><strong>学生易错点：</strong><span id="teacher-pitfalls"></span></div>
-<div class="teacher-item"><strong>解析要点：</strong><span id="teacher-explanation"></span></div>
+<div class="teacher-item"><strong>📌 考查知识点：</strong><span id="teacher-knowledge"></span></div>
+<div class="teacher-item"><strong>⚠️ 学生易错点：</strong><span id="teacher-pitfalls"></span></div>
+<div class="teacher-item"><strong>💡 解析要点：</strong><span id="teacher-explanation"></span></div>
 </div>
 </div>
 <div class="navigation">
-<button class="nav-btn" id="prev-btn">上一题</button>
-<button class="nav-btn" id="next-btn">下一题</button>
+<button class="nav-btn" id="prev-btn">← 上一题</button>
+<button class="nav-btn" id="next-btn">下一题 →</button>
 </div>
 </div>
 <script>
 const questions=[
-{type:"choice",stem:"【反射定律】光的反射定律是：",options:["反射角大于入射角","反射角等于入射角","反射角小于入射角","反射角与入射角无关"],correctIndex:1,knowledgePoint:"反射定律核心内容",pitfalls:"记混大小关系",explanation:"反射角=入射角是反射定律核心"},
-{type:"cloze",stem:"【角度定义】入射角是______与法线的夹角。",blankId:"b1",options:["入射光线","反射光线","镜面","物体"],correctOption:"入射光线",knowledgePoint:"入射角定义",pitfalls:"误认为是与镜面夹角",explanation:"入射角是入射光线与法线夹角"},
-{type:"choice",stem:"【基础概念】关于光的反射，正确的是：",options:["只有镜面才反射","粗糙面不反射","所有表面都反射光","只有光滑面反射"],correctIndex:2,knowledgePoint:"光的反射普遍性",pitfalls:"认为只有镜面反射",explanation:"任何表面都能反射光"},
-{type:"cloze",stem:"【三线关系】反射光线、入射光线、法线在______。",blankId:"b2",options:["同一平面内","不同平面","平行位置","垂直位置"],correctOption:"同一平面内",knowledgePoint:"三线共面",pitfalls:"忘记三线共面要求",explanation:"三线必须在同一平面内"},
-{type:"choice",stem:"【平面镜成像】平面镜成的像是：",options:["实像","虚像","有时实有时虚","既不是实也不是虚"],correctIndex:1,knowledgePoint:"平面镜成虚像",pitfalls:"混淆虚像实像",explanation:"平面镜成虚像，不能用屏接收"},
-{type:"cloze",stem:"【像的性质】平面镜成像，像与物大小______。",blankId:"b3",options:["相等","不等","变大","变小"],correctOption:"相等",knowledgePoint:"像物等大",pitfalls:"认为距离变化像会变",explanation:"像与物始终等大"},
-{type:"choice",stem:"【反射类型】镜面反射和漫反射：",options:["只有镜面反射遵守定律","只有漫反射遵守定律","都遵守反射定律","都不遵守定律"],correctIndex:2,knowledgePoint:"两种反射都遵守定律",pitfalls:"认为漫反射不遵守",explanation:"都遵守反射定律，区别在表面"},
-{type:"cloze",stem:"【反射应用】镜面发生______，粗糙面发生______。",blankId:"b4",options:["镜面反射","漫反射","折射","吸收"],correctOption:"镜面反射",knowledgePoint:"表面决定反射类型",pitfalls:"混淆条件",explanation:"光滑→镜面反射，粗糙→漫反射"},
-{type:"choice",stem:"【作图规范】法线应画成：",options:["实线带箭头","虚线不带箭头垂直镜面","实线不带箭头","虚线带箭头"],correctIndex:1,knowledgePoint:"法线画法",pitfalls:"画成实线",explanation:"法线是辅助线，用虚线，垂直镜面"},
-{type:"cloze",stem:"【光线表示】实际光线用______表示。",blankId:"b5",options:["实线","虚线","点线","曲线"],correctOption:"实线",knowledgePoint:"光路图规范",pitfalls:"都画虚线",explanation:"实际光线用实线+箭头"},
-{type:"choice",stem:"【角度换算】光与镜面成30°角入射，入射角为：",options:["30°","60°","90°","45°"],correctIndex:1,knowledgePoint:"入射角换算",pitfalls:"直接用镜面夹角",explanation:"入射角=90°-30°=60°"},
-{type:"cloze",stem:"【法线位置】法线与镜面______。",blankId:"b6",options:["垂直","平行","成45°角","无关"],correctOption:"垂直",knowledgePoint:"法线与镜面关系",pitfalls:"不清楚垂直关系",explanation:"法线始终垂直于镜面"},
-{type:"choice",stem:"【基础判断】入射角40°，反射角为：",options:["20°","40°","80°","50°"],correctIndex:1,knowledgePoint:"反射角=入射角",pitfalls:"进行多余计算",explanation:"直接相等，40°"},
-{type:"cloze",stem:"【距离关系】物距镜2米，像距镜______米。",blankId:"b7",options:["2","4","1","0.5"],correctOption:"2",knowledgePoint:"等距性",pitfalls:"混淆距离",explanation:"物距=像距=2米"},
-{type:"choice",stem:"【生活应用】水面倒影属于：",options:["小孔成像","光的反射","光的折射","光的直线传播"],correctIndex:1,knowledgePoint:"识别反射现象",pitfalls:"与其他现象混淆",explanation:"水面成像是平面镜成像，属反射"},
-{type:"cloze",stem:"【实验验证】折叠纸板看不到反射光线，说明三线______。",blankId:"b8",options:["共面","不共面","平行","垂直"],correctOption:"共面",knowledgePoint:"验证三线共面",pitfalls:"不理解实验意义",explanation:"折叠后不共面所以看不到"},
-{type:"choice",stem:"【实验器材】平面镜成像实验用玻璃板是为了：",options:["便宜","既能成像又透光","更清晰","不易碎"],correctIndex:1,knowledgePoint:"玻璃板作用",pitfalls:"从无关因素考虑",explanation:"玻璃板既反射又透光，便于定位"},
-{type:"cloze",stem:"【光路可逆】光路是______的。",blankId:"b9",options:["可逆","不可逆","有时可逆","无关"],correctOption:"可逆",knowledgePoint:"光路可逆",pitfalls:"不理解可逆",explanation:"入射反射光线可互换"},
-{type:"choice",stem:"【应用分析】屏幕粗糙是为了：",options:["集中光线","发生漫反射让各方向看到","吸收光","减少反射"],correctIndex:1,knowledgePoint:"漫反射应用",pitfalls:"认为用镜面反射",explanation:"漫反射使各角度都能看到"},
-{type:"cloze",stem:"【大小变化】人高1.7米，像高______米。",blankId:"b10",options:["1.7","3.4","0.85","2"],correctOption:"1.7",knowledgePoint:"像物等大",pitfalls:"认为会变化",explanation:"始终等大=1.7米"},
-{type:"choice",stem:"【特殊情况】垂直入射时反射角为：",options:["0°","45°","90°","180°"],correctIndex:0,knowledgePoint:"垂直入射",pitfalls:"认为是90°",explanation:"垂直入射入射角0°，反射角0°"},
-{type:"cloze",stem:"【测量基准】测角度要以______为基准。",blankId:"b11",options:["法线","镜面","入射光线","反射光线"],correctOption:"法线",knowledgePoint:"测量基准",pitfalls:"以镜面为准",explanation:"角度相对法线测量"},
-{type:"choice",stem:"【角度计算】入射光线与反射光线夹角80°，入射角为：",options:["40°","80°","20°","160°"],correctIndex:0,knowledgePoint:"光线夹角与入射角关系",pitfalls:"直接用夹角",explanation:"入射角=反射角=80°/2=40°"},
-{type:"cloze",stem:"【像的位置】像与物关于镜面______。",blankId:"b12",options:["对称","旋转","平移","无关"],correctOption:"对称",knowledgePoint:"对称性",pitfalls:"不理解对称",explanation:"镜面成像是轴对称"},
-{type:"choice",stem:"【多次反射】两垂直镜面两次反射后，出射光与入射光：",options:["同向平行","反向平行","垂直","重合"],correctIndex:1,knowledgePoint:"多次反射",pitfalls:"几何关系难",explanation:"两垂直镜反射后平行反向"},
-{type:"cloze",stem:"【潜望镜】潜望镜用两块______的镜。",blankId:"b13",options:["平行放置","垂直放置","倾斜放置","随意放置"],correctOption:"平行放置",knowledgePoint:"潜望镜原理",pitfalls:"不清楚位置",explanation:"两块平行镜面"},
-{type:"choice",stem:"【实验设计】多次改变入射角是为了：",options:["减小误差","得出普遍规律","增加难度","便于作图"],correctIndex:1,knowledgePoint:"多次实验意义",pitfalls:"误认为减误差",explanation:"寻找普遍规律"},
-{type:"cloze",stem:"【镜像现象】举右手，像举______手。",blankId:"b14",options:["左","右","双","无"],correctOption:"左",knowledgePoint:"左右对调",pitfalls:"死记不理解",explanation:"对称导致左右相反"},
-{type:"choice",stem:"【作图错误】下列错误的是：",options:["实线表示光线","法线用虚线","反射角可大于入射角","箭头表示方向"],correctIndex:2,knowledgePoint:"反射定律",pitfalls:"随意画角度",explanation:"反射角必须等于入射角"},
-{type:"cloze",stem:"【镜面转动】镜面转10°，反射光线转______°。",blankId:"b15",options:["10","20","5","0"],correctOption:"20",knowledgePoint:"镜面转动影响",pitfalls:"认为也是10°",explanation:"镜面转θ，反射光转2θ"},
-{type:"choice",stem:"【最小镜面】看全身像，镜子最小高度是身高的：",options:["全高","一半","三分之一","四分之一"],correctIndex:1,knowledgePoint:"最小镜高",pitfalls:"认为需全高",explanation:"利用几何，镜高=身高一半"},
-{type:"cloze",stem:"【对称作图】作图先找______点。",blankId:"b16",options:["对称","垂直","平行","中点"],correctOption:"对称",knowledgePoint:"作图方法",pitfalls:"不会用对称",explanation:"找对称点快速作图"},
-{type:"choice",stem:"【综合判断】下列错误的是：",options:["看物体因反射","两种反射都遵守定律","平面镜像可用屏接","光路可逆"],correctIndex:2,knowledgePoint:"综合辨析",pitfalls:"混淆虚实像",explanation:"虚像不能用屏接"},
-{type:"cloze",stem:"【综合应用】看黑板字是______。",blankId:"b17",options:["漫反射","镜面反射","折射","直线传播"],correctOption:"漫反射",knowledgePoint:"反射应用",pitfalls:"分不清两种反射",explanation:"粗糙表面漫反射"},
-{type:"choice",stem:"【复杂情境】某同学身高1.6米，站在镜前3米，要看到全身，镜子最小高度：",options:["1.6米","0.8米","3米","0.4米"],correctIndex:1,knowledgePoint:"综合应用最小镜高",pitfalls:"认为需全高",explanation:"镜高=身高/2=0.8米"},
-{type:"cloze",stem:"【综合理解】平面镜成像利用光的______。",blankId:"b18",options:["反射","折射","直线传播","色散"],correctOption:"反射",knowledgePoint:"成像原理",pitfalls:"混淆光学现象",explanation:"平面镜利用光的反射"},
-{type:"choice",stem:"【难度提升】入射角从30°增大到45°，反射角：",options:["从30°增到45°","从45°增到60°","从60°增到75°","保持不变"],correctIndex:0,knowledgePoint:"角度变化规律",pitfalls:"不理解同步变化",explanation:"反射角=入射角，同步变化"},
-{type:"cloze",stem:"【深度理解】镜面反射和漫反射的本质区别是反射面的______。",blankId:"b19",options:["粗糙程度","大小","颜色","材质"],correctOption:"粗糙程度",knowledgePoint:"两种反射本质区别",pitfalls:"从其他因素考虑",explanation:"粗糙程度决定反射类型"},
-{type:"choice",stem:"【综合辨析】下列关于平面镜成像，正确的是：",options:["像总比物大","像总比物小","像与物等大","像大小不确定"],correctIndex:2,knowledgePoint:"成像大小规律",pitfalls:"认为距离影响大小",explanation:"像与物始终等大"},
-{type:"cloze",stem:"【综合分析】要使反射光线与入射光线垂直，入射角应为______°。",blankId:"b20",options:["45","90","30","60"],correctOption:"45",knowledgePoint:"特殊角度关系",pitfalls:"不会几何分析",explanation:"垂直时，入射角+反射角=90°，各45°"}
+{type:"choice",stem:"【基础概念】小明在物理课上学习光的反射定律。老师问：反射角和入射角有什么关系？下列说法正确的是：",options:["反射角总是大于入射角","反射角等于入射角","反射角总是小于入射角","反射角是入射角的两倍"],correctIndex:1,knowledgePoint:"光的反射定律：反射角等于入射角",pitfalls:"学生可能受其他物理量关系影响，误选大于或小于",explanation:"反射定律明确规定：反射角等于入射角，这是光反射的基本规律"},
+{type:"cloze",stem:"【角度定义】小红在做光的反射实验时，老师强调：入射角不是光线与镜面的夹角，而是入射光线与 ______ 的夹角。她用量角器测量时，应该以 ______ 为基准。",blankId:"b1",options:["法线","镜面","反射光线","入射点"],correctOption:"法线",knowledgePoint:"入射角定义：入射光线与法线的夹角",pitfalls:"90%的学生会误认为入射角是光线与镜面的夹角",explanation:"入射角和反射角都是相对法线测量的，不是相对镜面"},
+{type:"choice",stem:"【实验现象】小明用激光笔照射平面镜，他想在纸板上画出完整的光路图。下列哪条线应该画成虚线？",options:["入射光线","反射光线","法线","光源到镜面的连线"],correctIndex:2,knowledgePoint:"光路图作图规范：法线用虚线表示",pitfalls:"学生常把所有线都画成实线，或者分不清哪些是辅助线",explanation:"法线是辅助线，用虚线表示且垂直于镜面；入射和反射光线是实际光线，用实线+箭头"},
+{type:"cloze",stem:"【三线关系】在探究反射定律的实验中，小华将纸板的一半沿法线向后折，发现在纸板上看不到反射光线了。这个现象说明：反射光线、入射光线和法线在 ______。",blankId:"b2",options:["同一平面内","不同平面内","同一直线上","互相垂直"],correctOption:"同一平面内",knowledgePoint:"反射定律：三线共面",pitfalls:"学生不理解折叠纸板实验的意义，不知道这是在验证什么",explanation:"纸板折叠后，如果反射光线不在这个平面内就看不到，证明三线必须共面"},
+{type:"choice",stem:"【角度计算】一束光线与平面镜成30°角射向镜面，则入射角为多少度？",options:["30°","60°","90°","45°"],correctIndex:1,knowledgePoint:"入射角与光线和镜面夹角的换算关系",pitfalls:"学生常直接把与镜面的夹角当成入射角，忘记换算",explanation:"入射角是与法线的夹角。法线垂直镜面，所以入射角 = 90° - 30° = 60°"},
+{type:"cloze",stem:"【平面镜成像】小红站在穿衣镜前1.5米处照镜子，她在镜中的像到镜面的距离是 ______ 米。如果她向镜子走近0.5米，像的大小会 ______（填"变大""变小"或"不变"）。",blankId:"b3",options:["1.5","2","不变","变大"],correctOption:"1.5",knowledgePoint:"平面镜成像特点：等距、等大",pitfalls:"学生受日常经验影响，认为走近镜子像会变大",explanation:"平面镜成像：物距=像距=1.5米；像与物始终等大，不随距离变化"},
+{type:"choice",stem:"【虚实像辨析】小明想用光屏（白纸）去接平面镜中自己的像，结果失败了。这是因为：",options:["光屏太小","光屏位置不对","平面镜成的是虚像，不能用光屏承接","平面镜太小"],correctIndex:2,knowledgePoint:"平面镜成虚像，不能用光屏承接",pitfalls:"学生常混淆虚像和实像，不理解虚像是反向延长线形成的",explanation:"平面镜成虚像，由反射光线的反向延长线会聚形成，不能用光屏承接"},
+{type:"cloze",stem:"【镜面反射】小华擦黑板时发现，黑板某个区域特别"亮"刺眼，这是因为那里发生了 ______。而粗糙的黑板表面能让全班各个角度都看清字，是因为发生了 ______。",blankId:"b4",options:["镜面反射","漫反射","光的折射","光的直线传播"],correctOption:"镜面反射",knowledgePoint:"镜面反射和漫反射的实际应用",pitfalls:"学生容易混淆两种反射的条件和效果",explanation:"光滑表面产生镜面反射（反光刺眼），粗糙表面产生漫反射（各方向可见）"},
+{type:"choice",stem:"【反射定律应用】入射角为40°时，反射角为：",options:["20°","40°","80°","50°"],correctIndex:1,knowledgePoint:"反射角等于入射角的直接应用",pitfalls:"学生可能进行多余计算或记混关系",explanation:"根据反射定律，反射角 = 入射角 = 40°，直接相等"},
+{type:"cloze",stem:"【对称性】小明身高1.7米，站在平面镜前，他的像高是 ______ 米。老师说，平面镜成像的本质是轴对称，像与物关于镜面 ______。",blankId:"b5",options:["1.7","3.4","对称","旋转"],correctOption:"1.7",knowledgePoint:"平面镜成像：等大、对称",pitfalls:"部分学生记住等大，但不理解对称性的几何含义",explanation:"平面镜成像等大，像高=物高=1.7米；像与物关于镜面轴对称"},
+{type:"choice",stem:"【光路可逆】老师做实验：让光沿着原来反射光线的方向射入，发现它会沿着原来入射光线的方向射出。这说明：",options:["光只能单向传播","光路是可逆的","反射光线比入射光线强","镜面有记忆功能"],correctIndex:1,knowledgePoint:"光路可逆原理",pitfalls:"学生可能不理解光路可逆的含义",explanation:"光路可逆：入射光线和反射光线可以互换，光会沿原路返回"},
+{type:"cloze",stem:"【作图规范】小华画光路图时，老师指出错误：实际存在的光线（入射光线、反射光线）应该用 ______ 表示，而法线这种辅助线应该用 ______ 表示。",blankId:"b6",options:["实线","虚线","箭头","点"],correctOption:"实线",knowledgePoint:"光路图作图规范：实线表示实际光线，虚线表示辅助线",pitfalls:"学生常把所有线都画成同一种，不区分实线虚线",explanation:"实际光线用实线+箭头，辅助线（法线、延长线）用虚线"},
+{type:"choice",stem:"【生活应用】夏天，小明在平静的湖边看到岸上树木的倒影。这个现象属于：",options:["光的直线传播","光的反射现象","光的折射现象","小孔成像"],correctIndex:1,knowledgePoint:"识别生活中的光反射现象",pitfalls:"学生可能与光的直线传播、折射等现象混淆",explanation:"水面成像是平面镜成像，属于光的反射。小孔成像和影子是直线传播"},
+{type:"cloze",stem:"【实验器材】探究平面镜成像特点的实验中，用玻璃板代替平面镜的原因是：玻璃板既能 ______，又能 ______，便于确定像的位置。",blankId:"b7",options:["反射成像","透光","挡光","吸收光"],correctOption:"反射成像",knowledgePoint:"平面镜成像实验中玻璃板的作用",pitfalls:"学生可能从价格、清晰度等无关因素考虑",explanation:"玻璃板既能反射成像，又能透光看到后面，便于用对称法确定像的位置"},
+{type:"choice",stem:"【改变入射角】小明做实验时，将入射角从30°逐渐增大到60°，观察到反射角：",options:["保持30°不变","从30°增大到60°","从60°减小到30°","变化不规律"],correctIndex:1,knowledgePoint:"入射角改变时，反射角同步变化",pitfalls:"学生可能认为反射角不变或反向变化",explanation:"反射角始终等于入射角，所以入射角增大，反射角也同步增大"},
+{type:"cloze",stem:"【特殊情况】当光线垂直射向平面镜时，入射角为 ______°，此时反射光线会沿 ______ 方向返回。",blankId:"b8",options:["0","90","原路","其他"],correctOption:"0",knowledgePoint:"垂直入射的特殊情况",pitfalls:"学生可能认为垂直入射时入射角是90°",explanation:"垂直入射时，入射光线与法线重合，入射角=0°，反射光线原路返回"},
+{type:"choice",stem:"【电影院设计】电影院的屏幕表面做成白色且粗糙，而不是光滑的镜面。这样设计的目的是：",options:["让光线集中，画面更亮","发生漫反射，使各个座位都能看到画面","吸收更多的光","减少光的反射"],correctIndex:1,knowledgePoint:"漫反射在生活中的应用",pitfalls:"学生可能认为应该用镜面反射让画面更亮",explanation:"粗糙屏幕产生漫反射，反射光向各方向传播，不同座位的观众都能看到"},
+{type:"cloze",stem:"【像的位置】物体距平面镜3米，则像到物体的距离是 ______ 米。这利用了平面镜成像的 ______ 特点。",blankId:"b9",options:["6","3","等距性","等大性"],correctOption:"6",knowledgePoint:"平面镜成像的等距性和对称性",pitfalls:"学生容易混淆像到镜距离和像到物距离",explanation:"物距=像距=3米，所以像到物距离=3+3=6米，体现等距性"},
+{type:"choice",stem:"【测量基准】小华用量角器测量入射角和反射角，老师提醒她：测量时一定要以哪条线为基准？",options:["镜面","入射光线","法线","反射光线"],correctIndex:2,knowledgePoint:"角度测量的基准线",pitfalls:"学生常以镜面为基准，导致测量错误",explanation:"入射角和反射角都是相对法线测量的，必须以法线为基准"},
+{type:"cloze",stem:"【两种反射对比】小明发现：看书时能从各个角度看清纸上的字，但用激光笔照射平面镜时，只有特定角度才能看到反射光。前者是 ______，后者是 ______。",blankId:"b10",options:["漫反射","镜面反射","光的折射","光的色散"],correctOption:"漫反射",knowledgePoint:"区分镜面反射和漫反射的现象",pitfalls:"学生可能分不清两种反射的区别",explanation:"纸张粗糙产生漫反射（各角度可见），镜面光滑产生镜面反射（定向）"},
+{type:"choice",stem:"【角度关系】入射光线与反射光线的夹角为80°，则入射角为：",options:["40°","80°","20°","160°"],correctIndex:0,knowledgePoint:"光线夹角与入射角的关系",pitfalls:"学生容易直接把光线夹角当成入射角",explanation:"入射角+反射角=光线夹角，且入射角=反射角，所以入射角=80°÷2=40°"},
+{type:"cloze",stem:"【左右对调】小明举起右手，在镜中看到的像举起的是 ______（填"左"或"右"）手。这是因为平面镜成像是 ______ 对称的。",blankId:"b11",options:["左","右","轴","中心"],correctOption:"左",knowledgePoint:"平面镜成像的左右对调现象源于轴对称",pitfalls:"学生死记'左右颠倒'，不理解对称本质",explanation:"镜像是轴对称，从观察者角度看，像的左右与物体相反"},
+{type:"choice",stem:"【光路图判断】老师画了四个光路图让同学们判断。正确的光路图应该满足：",options:["反射角大于入射角","法线与镜面平行","反射角等于入射角，且三线共面","入射光线与反射光线重合"],correctIndex:2,knowledgePoint:"正确光路图的判断标准",pitfalls:"学生可能只关注角度，忘记三线共面",explanation:"正确光路图必须同时满足：①反射角=入射角 ②三线共面 ③法线垂直镜面"},
+{type:"cloze",stem:"【镜面转动】小华做实验：保持入射光线方向不变，将平面镜绕入射点顺时针转动10°，则反射光线会顺时针转动 ______°。",blankId:"b12",options:["10","20","5","0"],correctOption:"20",knowledgePoint:"镜面转动对反射光路的影响",pitfalls:"学生常误认为反射光线也转10°",explanation:"镜面转θ，法线也转θ，导致入射角和反射角各变化θ，所以反射光线转2θ=20°"},
+{type:"choice",stem:"【多次反射】两块互相垂直的平面镜，光线经过两次反射后，出射光线与入射光线的关系是：",options:["方向相同","方向相反但平行","互相垂直","重合"],correctIndex:1,knowledgePoint:"多次反射的光路分析",pitfalls:"学生对多次反射的几何关系理解困难",explanation:"两垂直镜面反射后，出射光线与入射光线平行但方向相反"},
+{type:"cloze",stem:"【潜望镜原理】潜望镜利用两块 ______ 放置的平面镜，让光线经过 ______ 次反射，改变光的传播路径。",blankId:"b13",options:["平行","垂直","两","三"],correctOption:"平行",knowledgePoint:"潜望镜的光学原理",pitfalls:"学生可能不清楚两块镜子的位置关系",explanation:"潜望镜用两块平行放置的平面镜，光经过两次反射改变方向"},
+{type:"choice",stem:"【实验设计】在探究反射定律的实验中，多次改变入射角度进行实验，这样做的主要目的是：",options:["减小测量误差","得出普遍规律而非偶然现象","增加实验难度","便于画光路图"],correctIndex:1,knowledgePoint:"多次实验寻找普遍规律",pitfalls:"学生误认为多次实验是为了减小误差（那是求平均值的目的）",explanation:"改变条件多次实验是为了发现普遍规律，避免偶然性"},
+{type:"cloze",stem:"【综合理解】小明观察到：教室里的黑板"反光"很刺眼，但黑板上的字从各个角度都能看清。反光是 ______现象，看清字是 ______现象。",blankId:"b14",options:["镜面反射","漫反射","光的折射","光的色散"],correctOption:"镜面反射",knowledgePoint:"区分同一物体上的两种反射",pitfalls:"学生可能认为黑板只发生一种反射",explanation:"黑板光滑部分镜面反射（反光），粗糙的字迹部分漫反射（可见）"},
+{type:"choice",stem:"【全身镜问题】小明身高1.6米，要在墙上的平面镜中看到自己的全身像，镜子的最小高度应该是：",options:["1.6米（和身高一样）","0.8米（身高的一半）","3.2米（身高的两倍）","0.4米（身高的四分之一）"],correctIndex:1,knowledgePoint:"利用光的反射和几何关系求最小镜面高度",pitfalls:"学生常认为需要和身高一样高的镜子",explanation:"根据光的反射和几何对称，镜子高度只需人身高的一半即可看到全身"},
+{type:"cloze",stem:"【对称作图】在作平面镜成像的光路图时，应该先找出物体关键点关于镜面的 ______ 点，然后连接对应点得到像。这种方法利用了平面镜成像的 ______ 特点。",blankId:"b15",options:["对称","中","对称性","等大性"],correctOption:"对称",knowledgePoint:"平面镜成像作图的对称法",pitfalls:"学生作图时不会利用对称性，随意画",explanation:"平面镜成像本质是轴对称，找对称点是最快速准确的作图方法"},
+{type:"choice",stem:"【光学仪器】下列光学仪器或现象中，不是利用光的反射原理的是：",options:["汽车后视镜","穿衣镜","放大镜看字","潜望镜"],correctIndex:2,knowledgePoint:"区分反射和折射的应用",pitfalls:"学生可能把所有光学现象都归为反射",explanation:"放大镜利用光的折射，其他都是利用光的反射（平面镜成像）"},
+{type:"cloze",stem:"【反射定律验证】小华做实验时，将硬纸板的B面（法线右侧）向后折转，发现在纸板上看不到反射光线。这个实验现象证明了反射定律中的：反射光线、入射光线、法线 ______。",blankId:"b16",options:["在同一平面内","互相垂直","互相平行","夹角相等"],correctOption:"在同一平面内",knowledgePoint:"纸板折叠实验验证三线共面",pitfalls:"学生不理解这个实验的设计意图",explanation:"纸板折叠后不在同一平面，反射光线就看不到了，证明三线必须共面"},
+{type:"choice",stem:"【成像特点】关于平面镜成像，下列说法错误的是：",options:["像与物体大小相等","像与物体到镜面的距离相等","像可以用光屏承接到","像与物体关于镜面对称"],correctIndex:2,knowledgePoint:"平面镜成像特点的综合辨析",pitfalls:"学生容易混淆虚像和实像",explanation:"平面镜成虚像，不能用光屏承接。其他三项都是正确的"},
+{type:"cloze",stem:"【综合应用】小明发现，当他离镜子很近时，镜中的像看起来"很大"，但实际上像的大小 ______（填"变大了""没变"）。他感觉像变大，是因为像在他视野中占的 ______ 变大了。",blankId:"b17",options:["没变","变大了","角度","距离"],correctOption:"没变",knowledgePoint:"平面镜成像等大不变，视觉错觉的解释",pitfalls:"学生受日常经验影响，认为靠近镜子像会变大",explanation:"平面镜成像等大，像的实际大小不变。靠近时视角变大，产生错觉"},
+{type:"choice",stem:"【作图错误辨析】小华画的光路图被老师指出错误。下列哪项是错误的画法？",options:["入射光线用实线带箭头","法线用虚线垂直于镜面","反射角画得比入射角大","光线箭头表示光传播方向"],correctIndex:2,knowledgePoint:"光路图作图规范和反射定律",pitfalls:"学生作图时常随意画角度大小",explanation:"根据反射定律，反射角必须等于入射角，不能画大或画小"},
+{type:"cloze",stem:"【深度理解】镜面反射和漫反射的本质区别不在于是否遵守反射定律（都遵守），而在于反射面的 ______不同，导致反射光的 ______不同。",blankId:"b18",options:["粗糙程度","方向","大小","颜色"],correctOption:"粗糙程度",knowledgePoint:"两种反射的本质区别",pitfalls:"学生可能认为漫反射不遵守反射定律",explanation:"都遵守反射定律。光滑面产生镜面反射（反射光平行），粗糙面产生漫反射（反射光散射）"},
+{type:"choice",stem:"【综合计算】一束光与镜面成25°角入射到平面镜上，则入射光线与反射光线的夹角为：",options:["50°","130°","65°","25°"],correctIndex:1,knowledgePoint:"综合角度计算",pitfalls:"学生容易在多步计算中出错",explanation:"入射角=90°-25°=65°，反射角=65°，光线夹角=180°-65°-65°=130°（或65°+65°=130°）"},
+{type:"cloze",stem:"【综合分析】要使反射光线与入射光线互相垂直，入射角应该设置为 ______°。此时，入射光线、反射光线、法线三者的位置关系是：法线 ______。",blankId:"b19",options:["45","90","恰好平分两条光线的夹角","垂直于镜面"],correctOption:"45",knowledgePoint:"特殊角度关系的几何分析",pitfalls:"学生不会进行几何推理",explanation:"两光线垂直时，入射角+反射角=90°，因为入射角=反射角，所以各为45°"},
+{type:"choice",stem:"【综合应用】平面镜前有一个物体AB，A点距镜面3cm，B点距镜面5cm。则像A'B'中，A'点距镜面：",options:["3cm","5cm","4cm","8cm"],correctIndex:0,knowledgePoint:"平面镜成像的等距性（每个点单独对称）",pitfalls:"学生可能混淆不同点到镜面的距离",explanation:"平面镜成像，每个点到镜面的距离等于其像点到镜面的距离，所以A'距镜3cm"}
 ];
 let currentIndex=0,draggedWord=null;
 function init(){updateQuestion();updateProgress();updateNavButtons()}
 function updateQuestion(){const q=questions[currentIndex];document.getElementById('feedback').className='feedback';document.getElementById('question-number').textContent=`第 ${currentIndex+1} 题`;document.getElementById('current-question').textContent=currentIndex+1;document.getElementById('question-stem').innerHTML=q.stem.replace(/______/g,`<span class="blank" id="${q.blankId||'blank'}" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></span>`);const typeEl=document.getElementById('question-type');if(q.type==='choice'){typeEl.textContent='选择题';typeEl.className='question-type type-choice'}else{typeEl.textContent='选词填空';typeEl.className='question-type type-cloze'}document.getElementById('teacher-knowledge').textContent=q.knowledgePoint;document.getElementById('teacher-pitfalls').textContent=q.pitfalls;document.getElementById('teacher-explanation').textContent=q.explanation;q.type==='choice'?showChoice(q):showCloze(q)}
 function showChoice(q){document.getElementById('choice-options').style.display='grid';document.getElementById('cloze-area').style.display='none';const c=document.getElementById('choice-options');c.innerHTML='';q.options.forEach((o,i)=>{const btn=document.createElement('button');btn.className='option-btn';btn.textContent=o;btn.onclick=()=>checkChoice(i,q.correctIndex,btn);c.appendChild(btn)})}
-function checkChoice(sel,cor,btn){const btns=document.querySelectorAll('.option-btn');btns.forEach(b=>b.classList.add('disabled'));const fb=document.getElementById('feedback');fb.className='feedback show';if(sel===cor){btn.classList.add('correct');fb.className='feedback show correct';fb.textContent='✅ 回答正确！'}else{btn.classList.add('wrong');btns[cor].classList.add('correct');fb.className='feedback show wrong';fb.textContent='❌ 再想想看'}}
+function checkChoice(sel,cor,btn){const btns=document.querySelectorAll('.option-btn');btns.forEach(b=>b.classList.add('disabled'));const fb=document.getElementById('feedback');fb.className='feedback show';if(sel===cor){btn.classList.add('correct');fb.className='feedback show correct';fb.textContent='✅ 回答正确！太棒了！'}else{btn.classList.add('wrong');btns[cor].classList.add('correct');fb.className='feedback show wrong';fb.textContent='❌ 再想一想，看看解析吧'}}
 function showCloze(q){document.getElementById('choice-options').style.display='none';document.getElementById('cloze-area').style.display='block';const p=document.getElementById('word-pool');p.innerHTML='';q.options.forEach(w=>{const t=document.createElement('div');t.className='word-tag';t.textContent=w;t.draggable=true;t.ondragstart=e=>{draggedWord=w;e.dataTransfer.effectAllowed='move'};p.appendChild(t)})}
 function allowDrop(e){e.preventDefault();e.target.classList.add('drop-over')}
 function dragLeave(e){e.target.classList.remove('drop-over')}
 function drop(e){e.preventDefault();e.target.classList.remove('drop-over');if(draggedWord&&e.target.classList.contains('blank')){e.target.textContent=draggedWord;e.target.classList.add('filled');document.querySelectorAll('.word-tag').forEach(t=>{if(t.textContent===draggedWord){t.classList.add('used');t.draggable=false}})}}
-document.getElementById('submit-cloze').onclick=function(){const q=questions[currentIndex];const b=document.getElementById(q.blankId);const ans=b.textContent.trim();const fb=document.getElementById('feedback');fb.className='feedback show';if(ans===q.correctOption){fb.className='feedback show correct';fb.textContent='✅ 回答正确！'}else{fb.className='feedback show wrong';fb.textContent=`❌ 正确答案是"${q.correctOption}"`}document.querySelectorAll('.word-tag').forEach(t=>t.draggable=false)};
+document.getElementById('submit-cloze').onclick=function(){const q=questions[currentIndex];const b=document.getElementById(q.blankId);const ans=b.textContent.trim();const fb=document.getElementById('feedback');fb.className='feedback show';if(ans===q.correctOption){fb.className='feedback show correct';fb.textContent='✅ 回答正确！太棒了！'}else{fb.className='feedback show wrong';fb.textContent=`❌ 正确答案是"${q.correctOption}"`}document.querySelectorAll('.word-tag').forEach(t=>t.draggable=false)};
 document.getElementById('reset-cloze').onclick=function(){const q=questions[currentIndex];const b=document.getElementById(q.blankId);b.textContent='';b.classList.remove('filled');document.querySelectorAll('.word-tag').forEach(t=>{t.classList.remove('used');t.draggable=true});document.getElementById('feedback').className='feedback'};
 function updateProgress(){const p=((currentIndex+1)/questions.length)*100;document.getElementById('progress-bar').style.width=p+'%'}
 function updateNavButtons(){document.getElementById('prev-btn').disabled=currentIndex===0;document.getElementById('next-btn').disabled=currentIndex===questions.length-1}
