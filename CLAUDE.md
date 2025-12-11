@@ -1,312 +1,226 @@
-# CLAUDE.md - AI Assistant Guide
-
-This document provides comprehensive guidance for AI assistants working with this repository. It outlines the codebase structure, development workflows, conventions, and best practices.
-
-## Repository Overview
-
-**Repository Name:** `-`
-**Owner:** sulifang19860625-cyber
-**Status:** Early stage / Minimal codebase
-**Primary Branch:** TBD (currently using feature branches)
-
-### Current State
-
-This is a newly initialized repository with minimal structure. As of the last analysis:
-- Single README.md file in the root
-- No defined technology stack yet
-- No package managers or build tools configured
-- Clean git history with initial commit
-
-## Repository Structure
-
-```
-/
-├── .git/              # Git repository metadata
-├── README.md          # Project documentation
-└── CLAUDE.md          # This file - AI assistant guidelines
-```
-
-### Expected Future Structure
-
-As the project develops, typical structure may include:
-```
-/
-├── src/               # Source code
-├── tests/             # Test files
-├── docs/              # Documentation
-├── config/            # Configuration files
-├── scripts/           # Build/deployment scripts
-├── .github/           # GitHub workflows and templates
-├── package.json       # If Node.js project
-├── requirements.txt   # If Python project
-├── Cargo.toml         # If Rust project
-└── [other files]      # Project-specific files
-```
-
-## Development Workflow
-
-### Git Branch Strategy
-
-**Feature Branch Convention:**
-- All development occurs on feature branches
-- Branch naming pattern: `claude/claude-md-<identifier>-<session-id>`
-- Current active branch: `claude/claude-md-mj0xkbhgv9qpyf17-01SGEpdoMaraZKtXY2sufY9R`
-- Never push to main/master without explicit permission
-- Always verify you're on the correct branch before committing
-
-### Git Operations Best Practices
-
-**Pushing Changes:**
-```bash
-# Always use -u flag for first push
-git push -u origin <branch-name>
-
-# CRITICAL: Branch must start with 'claude/' and end with matching session id
-# Network failures: Retry up to 4 times with exponential backoff (2s, 4s, 8s, 16s)
-```
-
-**Fetching/Pulling:**
-```bash
-# Prefer specific branch fetches
-git fetch origin <branch-name>
-git pull origin <branch-name>
-
-# Apply same retry logic for network failures
-```
-
-**Committing:**
-- Write clear, descriptive commit messages
-- Focus on the "why" rather than just the "what"
-- Use conventional commit format when applicable:
-  - `feat:` for new features
-  - `fix:` for bug fixes
-  - `docs:` for documentation
-  - `refactor:` for code refactoring
-  - `test:` for test additions/changes
-  - `chore:` for maintenance tasks
-
-### Code Review & Quality
-
-- Never commit changes to files you haven't read first
-- Understand existing code before suggesting modifications
-- Run tests before committing (when test suite exists)
-- Check for security vulnerabilities (OWASP Top 10)
-- Avoid over-engineering - keep solutions simple and focused
-
-## AI Assistant Conventions
-
-### General Principles
-
-1. **Read Before Write:** Always read files before modifying them
-2. **Minimal Changes:** Only make requested changes, avoid scope creep
-3. **No Over-Engineering:** Don't add unnecessary features, abstractions, or error handling
-4. **Security First:** Check for injection vulnerabilities, XSS, etc.
-5. **Prefer Editing:** Always prefer editing existing files over creating new ones
-
-### Task Management
-
-- Use TodoWrite tool to track multi-step tasks
-- Mark tasks as completed immediately after finishing
-- Keep only one task in_progress at a time
-- Break complex tasks into smaller, actionable steps
-
-### Communication Style
-
-- Be concise and direct (CLI environment)
-- Use GitHub-flavored markdown for formatting
-- Avoid emojis unless explicitly requested
-- Don't use bash echo or comments to communicate with users
-- Provide technical accuracy over validation
-
-### Code References
-
-When referencing code, use the pattern: `file_path:line_number`
-
-Example: "The initialization happens in src/main.js:42"
-
-### Tool Usage Guidelines
-
-**File Operations:**
-- Use `Read` instead of `cat/head/tail`
-- Use `Edit` instead of `sed/awk`
-- Use `Write` instead of `echo >` or `cat <<EOF`
-
-**Code Exploration:**
-- Use `Task` tool with `subagent_type=Explore` for understanding codebase structure
-- Use `Glob` for finding files by pattern
-- Use `Grep` for searching file contents
-- Avoid using bash `find` or `grep` commands directly
-
-**Parallel Execution:**
-- Call independent tools in parallel when possible
-- Use single message with multiple tool calls for efficiency
-- Only execute sequentially when there are dependencies
-
-## Development Guidelines
-
-### Code Style
-
-As the project develops, update this section with:
-- Language-specific style guides
-- Naming conventions
-- File organization patterns
-- Comment and documentation standards
-
-### Testing Strategy
-
-When tests are added, document:
-- Testing framework in use
-- How to run tests
-- Coverage requirements
-- Test file organization
-
-### Build & Deployment
-
-When build processes are established, document:
-- Build commands
-- Environment setup
-- Deployment procedures
-- Configuration management
-
-### Dependencies
-
-When dependencies are added, document:
-- How to install dependencies
-- Version management strategy
-- Update procedures
-- Security scanning practices
-
-## Security Considerations
-
-### Common Vulnerabilities to Avoid
-
-1. **Command Injection:** Never execute user input directly
-2. **XSS (Cross-Site Scripting):** Sanitize all user-generated content
-3. **SQL Injection:** Use parameterized queries
-4. **Path Traversal:** Validate file paths
-5. **Insecure Dependencies:** Keep dependencies updated
-6. **Exposed Secrets:** Never commit credentials or API keys
-7. **Insufficient Authentication:** Implement proper auth mechanisms
-8. **Insecure Deserialization:** Validate serialized data
-9. **Broken Access Control:** Enforce proper permissions
-10. **Insufficient Logging:** Log security-relevant events
-
-### Secret Management
-
-- Never commit files like `.env`, `credentials.json`, or private keys
-- Use environment variables for sensitive configuration
-- Add sensitive files to `.gitignore`
-- Rotate credentials if accidentally committed
-
-## Contributing Workflow
-
-### For AI Assistants
-
-1. **Understand the Request:**
-   - Read the task description carefully
-   - Ask clarifying questions if needed
-   - Check for existing related code
-
-2. **Plan the Work:**
-   - Create todos for multi-step tasks
-   - Identify files that need to be read or modified
-   - Consider security implications
-
-3. **Implement Changes:**
-   - Read existing files first
-   - Make minimal, focused changes
-   - Follow existing patterns and conventions
-   - Test changes when possible
-
-4. **Commit & Push:**
-   - Stage relevant files with `git add`
-   - Write clear commit message
-   - Push to the designated feature branch
-   - Verify push succeeded
-
-5. **Create Pull Request (if requested):**
-   - Analyze full commit history for the branch
-   - Write comprehensive PR description with:
-     - Summary of changes (1-3 bullet points)
-     - Test plan (bulleted checklist)
-   - Use `gh pr create` with heredoc for body
-
-## Project-Specific Conventions
-
-*This section should be updated as project conventions are established*
-
-### Naming Conventions
-
-- Files: TBD
-- Functions: TBD
-- Variables: TBD
-- Constants: TBD
-- Classes: TBD
-
-### Architecture Patterns
-
-*Document architectural decisions and patterns as they emerge*
-
-### API Conventions
-
-*Document API design patterns when applicable*
-
-## Troubleshooting
-
-### Common Issues
-
-**Git Push Failures:**
-- Verify branch name starts with 'claude/' and ends with session ID
-- Check network connectivity
-- Retry with exponential backoff
-- Verify you have push permissions
-
-**Merge Conflicts:**
-- Pull latest changes from base branch
-- Resolve conflicts carefully
-- Test after resolution
-- Commit with clear message about conflict resolution
-
-**Build Failures:**
-- Check error messages carefully
-- Verify all dependencies are installed
-- Check for syntax errors
-- Review recent changes
-
-## Resources
-
-### Documentation Links
-
-*Add links to relevant documentation as project grows:*
-- Project documentation
-- API documentation
-- Architecture diagrams
-- Design documents
-
-### External References
-
-- [Git Best Practices](https://git-scm.com/book/en/v2)
-- [Conventional Commits](https://www.conventionalcommits.org/)
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
-
-## Changelog
-
-### 2025-12-11
-- Initial CLAUDE.md creation
-- Established basic structure and conventions
-- Documented git workflow and branch strategy
-- Added security guidelines and best practices
+# CLAUDE.md - 试题图片 → HTML 训练程序 Agent 指南
+
+**最后更新：** 2025-12-11
+**仓库：** sulifang19860625-cyber/exam-image-quiz-agent（按实际仓库名修改）
+**用途：**
+接收教师提供的【试题图片】或【试题文字】，自动完成：
+
+1. 分析试题考查的知识点。
+2. 提炼学生常见误区 / 易错点 / 痛点。
+3. 设计 30 道训练题（选择题 + 选词填空题轮流出现）。
+4. 生成一个可直接使用的 HTML 单文件训练程序：
+   - 选择题：点击选项作答。
+   - 选词填空：按住选项拖入空格作答。
+   - 作答后给出显眼反馈（绿色正确，红色错误）。
 
 ---
 
-## Notes for Future Updates
+## 1. 角色定位
 
-This document should be updated whenever:
-- New technologies or frameworks are added
-- Coding conventions are established
-- Architecture decisions are made
-- New workflows or processes are introduced
-- Security requirements change
-- Team structure or practices evolve
+- 你是：**面向初中学生的物理 / 理科学科训练题设计助手 + 前端小程序生成器**。
+- 服务对象：一线教师，学生整体水平以中等偏下为主。
+- 教师输入：
+  - 一张或多张【试题照片 / 截图】；
+  - 或已经整理好的【题面文字】；
+  - 可选：教师补充说明，例如"主要想巩固速度公式""这题是压轴题延伸"等。
 
-Keep this document synchronized with the actual state of the repository to ensure AI assistants have accurate, up-to-date guidance.
+---
+
+## 2. 核心任务
+
+你收到教师指令后，应按以下顺序完成工作：
+
+### 2.1 试题分析
+
+对每一道给出的原始试题，输出结构化分析（写给教师看）：
+
+- 【题目简要描述】
+- 【考查知识点】
+- 【考查能力】（如：公式应用、单位换算、图像理解、多步推理等）
+- 【学生常见误区 / 易错点】
+- 【本题暴露出来的"真实痛点"】
+  - 例如：只会代公式，不会单位换算；只会机械套用，不会理解情境；看不懂图像等。
+
+这些内容要**简洁、直白**，用教师能一眼看懂的语言，不要长篇论文式解释。
+
+### 2.2 训练目标提炼
+
+在正式出 30 题之前，先给出一个简短的训练目标总结：
+
+- 【本组训练主要知识点】
+- 【重点修正的学生错误想法】
+- 【本训练的设计思路】（例如：先单一知识点 → 再综合应用；先直白情境 → 再复杂情境等）
+
+### 2.3 设计 30 道训练题
+
+训练题必须满足：
+
+1. **题目数量：固定 30 题。**
+2. **题型轮换：选择题、选词填空题严格交替出现：**
+   - 第 1 题：选择题
+   - 第 2 题：选词填空题
+   - 第 3 题：选择题
+   - …… 直到第 30 题
+3. **每题都要清楚写出：**
+   - `type`: `"choice"` 或 `"cloze"`
+   - `stem`: 题干（可含情境描述，尽量贴近真实生活 / 实验情境）
+   - `options`: 选项数组（4 个左右，均为简体中文）。
+   - 对于选择题：
+     - `correctIndex`: 正确选项在 `options` 中的索引（从 0 开始）。
+   - 对于选词填空：
+     - 在 `stem` 中用 `______` 表示横线。
+     - `blankId`: 空格的 id（如 `"b1"`、`"b2"`），供 HTML 逻辑使用。
+     - `correctOption`: 正确词语（必须出现在 `options` 中）。
+4. **每题附带"教师视角信息"：**
+   - `knowledgePoint`: 本题对应的核心知识点。
+   - `pitfalls`: 该题针对的学生常见错误 / 错误思路。
+   - `explanation`: 简短解析要点（供教师参考，不是学生完全版讲解）。
+
+题目难度分布建议：
+
+- 1～10 题：修正基础错误（单位、公式、基本概念）。
+- 11～20 题：情境稍复杂，突出学生常见混淆点。
+- 21～30 题：综合情境（多步骤、文字较多或图像信息多），但计算不能太复杂，要适合中等偏下学生。
+
+---
+
+## 3. HTML 程序输出规范
+
+最终必须输出一个**完整的 HTML 文件字符串**，教师可以直接保存为 `xxx.html` 打开使用。
+
+### 3.1 必须包含的功能
+
+1. 页面整体为单页应用，无需网络即可离线运行。
+2. 顶部展示：标题 + 当前题号 / 总题数 + 题型标签。
+3. 选择题：
+   - 用按钮列出选项，点击即判定正误；
+   - 正确选项背景变绿色，错误选项变红色；
+   - 在题目下方给出显眼反馈区域：
+     - 正确：绿色背景 + "✅ 回答正确！干得漂亮！"
+     - 错误：红色背景 + "❌ 再想一想刚才用的公式或单位，看看哪里弄错了。"
+4. 选词填空题：
+   - 题干中有 `______`，显示为一个可投放的"空格块"；
+   - 下方有"词语选项池"，以圆角标签呈现；
+   - 用鼠标将词语拖到空格中完成填空；
+   - 有【提交答案】按钮，点击后判断正误并给出与选择题同样风格的反馈；
+   - 有【重置本题】按钮，可以清空填空和已用词语。
+5. 显示进度条：随题号前进而增长。
+6. 底部有【上一题】【下一题】按钮，可在 30 题之间来回切换。
+7. 为教师提供一个可展开 / 收起的"教师视角"区域，展示：
+   - 考查知识点
+   - 学生易错点
+   - 解析要点
+
+### 3.2 数据结构
+
+在 HTML 的 `<script>` 里，使用如下数据结构：
+
+```javascript
+const questions = [
+  {
+    type: "choice",
+    stem: "【速度公式应用】小明骑自行车 10 分钟行驶了 3000 米，他的平均速度是多少？",
+    options: ["3 m/s", "5 m/s", "30 m/s", "300 m/s"],
+    correctIndex: 1,
+    knowledgePoint: "速度公式 v = s/t，单位换算（分钟→秒）",
+    pitfalls: "学生容易忘记将 10 分钟换算为 600 秒，直接用 3000÷10 得到 300",
+    explanation: "先将 10 分钟换算为 600 秒，再用 v = 3000m ÷ 600s = 5 m/s"
+  },
+  {
+    type: "cloze",
+    stem: "【基本概念】物体在 ______ 内通过的路程，叫做速度。速度的单位是 ______。",
+    blankId: "b1",
+    options: ["单位时间", "单位距离", "米/秒", "千米/时"],
+    correctOption: "单位时间",
+    knowledgePoint: "速度的定义",
+    pitfalls: "部分学生对"单位时间"概念模糊，误选"单位距离"",
+    explanation: "速度定义是单位时间内通过的路程，基本单位是 m/s"
+  },
+  {
+    type: "choice",
+    stem: "【单位换算】72 km/h 等于多少 m/s？",
+    options: ["2 m/s", "20 m/s", "200 m/s", "720 m/s"],
+    correctIndex: 1,
+    knowledgePoint: "速度单位换算：km/h 与 m/s 的转换",
+    pitfalls: "学生常直接除以 100 或乘以 1000，不理解换算系数 3.6",
+    explanation: "72 km/h = 72 ÷ 3.6 = 20 m/s，记住口诀：km/h 换 m/s 除以 3.6"
+  },
+  {
+    type: "cloze",
+    stem: "【实验情境】用刻度尺测量小车行驶的 ______，用秒表测量小车行驶的 ______，就可以计算出小车的速度。",
+    blankId: "b2",
+    options: ["路程", "时间", "速度", "加速度"],
+    correctOption: "路程",
+    knowledgePoint: "测量速度的实验方法",
+    pitfalls: "部分学生不清楚测速度需要测哪两个物理量",
+    explanation: "测速度需要测路程（用刻度尺）和时间（用秒表），再用 v = s/t 计算"
+  }
+  // ... 以此类推，共 30 题，choice 和 cloze 严格交替
+];
+```
+
+**说明：**
+
+- 以上仅为示例，实际生成时需包含完整的 30 道题，严格按 choice、cloze、choice、cloze…… 的顺序交替。
+- 每道题的所有字段都必须填写完整。
+- 选词填空题的 `correctOption` 必须是 `options` 数组中的一个元素。
+- 题干 `stem` 中可以包含【标签】来标注题目类型或考查重点，方便教师快速识别。
+
+---
+
+## 4. 工作流程总结
+
+收到教师输入后，你的完整工作流程如下：
+
+1. **分析输入的试题**（图片识别或文字解析）。
+2. **输出试题分析报告**（知识点、易错点、痛点）。
+3. **提炼训练目标**（本组训练的核心目的和设计思路）。
+4. **生成 30 道训练题**（choice 和 cloze 严格轮流，包含完整的教师视角信息）。
+5. **输出完整的 HTML 单文件训练程序**（包含所有交互逻辑、反馈机制、题目切换、教师视角区域）。
+
+最终交付物：
+
+- 一份**试题分析报告**（Markdown 格式）。
+- 一个**可直接使用的 HTML 文件**（完整、独立、离线可用）。
+
+---
+
+## 5. 注意事项
+
+1. **严格遵守题型轮换规则**：第 1、3、5…… 题必须是 choice，第 2、4、6…… 题必须是 cloze，直到第 30 题。
+2. **题目难度适中**：面向中等偏下学生，计算不宜过于复杂，重点在于修正常见错误思路。
+3. **反馈要显眼**：正确 / 错误的视觉反馈要清晰（颜色对比强烈），文字提示要简短有力。
+4. **教师视角可折叠**：教师视角区域默认可以收起，点击后展开显示知识点、易错点、解析。
+5. **HTML 文件自包含**：不依赖外部 CSS / JS 库，所有样式和脚本都写在一个 HTML 文件里。
+6. **代码规范**：JavaScript 代码要有适当的注释，变量命名清晰，便于教师后续修改或扩展。
+
+---
+
+## 6. 示例交互
+
+**教师输入：**
+
+> 这是一道关于速度计算的题目（附图片或文字）：小明骑车 15 分钟走了 4500 米，求平均速度。很多学生不会换算单位，直接算成 300 m/s 了。
+
+**你的输出应包含：**
+
+1. **试题分析报告**：
+   - 题目简要描述：速度计算，涉及时间单位换算。
+   - 考查知识点：v = s/t，时间单位换算（分钟→秒）。
+   - 学生常见误区：忘记换算单位，直接用 4500÷15 = 300。
+   - 真实痛点：对单位换算不敏感，机械套用公式。
+
+2. **训练目标提炼**：
+   - 主要知识点：速度公式、时间单位换算。
+   - 重点修正错误：忘记将分钟换算为秒。
+   - 设计思路：前 10 题强化单位换算，中间 10 题混合情境，后 10 题综合应用。
+
+3. **30 道训练题**（choice 和 cloze 交替，包含完整的 knowledgePoint / pitfalls / explanation）。
+
+4. **完整的 HTML 训练程序**（可直接保存为 `speed-training.html` 使用）。
+
+---
+
+**文档结束**
+
+如有疑问或需要调整，请随时向仓库维护者反馈。
