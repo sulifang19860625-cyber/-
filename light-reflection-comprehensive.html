@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光的反射综合训练</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header .meta {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #4ade80;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .question-area {
+            padding: 40px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .type-choice {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .type-cloze {
+            background: #fce7f3;
+            color: #9f1239;
+        }
+
+        .question-stem {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: #1f2937;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 120px;
+            border-bottom: 2px solid #667eea;
+            padding: 2px 10px;
+            margin: 0 5px;
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            min-height: 24px;
+            vertical-align: bottom;
+        }
+
+        .blank.filled {
+            background: #e0e7ff;
+            border-radius: 4px;
+        }
+
+        .blank.drop-over {
+            background: #c7d2fe;
+            transform: scale(1.05);
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            padding: 15px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: #667eea;
+            background: #f5f7ff;
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            background: #4ade80;
+            border-color: #22c55e;
+            color: white;
+        }
+
+        .option-btn.wrong {
+            background: #f87171;
+            border-color: #ef4444;
+            color: white;
+        }
+
+        .option-btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .word-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .word-tag {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 25px;
+            cursor: move;
+            user-select: none;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .word-tag:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .word-tag.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .cloze-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .feedback {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d1fae5;
+            border: 2px solid #22c55e;
+            color: #065f46;
+        }
+
+        .feedback.wrong {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .teacher-panel {
+            background: #f9fafb;
+            border-top: 2px solid #e5e7eb;
+            padding: 20px 40px;
+        }
+
+        .teacher-toggle {
+            background: none;
+            border: none;
+            color: #667eea;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+
+        .teacher-toggle:hover {
+            color: #764ba2;
+        }
+
+        .teacher-content {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .teacher-content.show {
+            display: block;
+        }
+
+        .teacher-item {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .teacher-item strong {
+            color: #667eea;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+            background: #f9fafb;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>光的反射综合训练</h1>
+            <div class="meta">
+                <span id="current-question">1</span> / <span id="total-questions">30</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="question-area">
+            <div class="question-header">
+                <div class="question-number" id="question-number">第 1 题</div>
+                <div class="question-type" id="question-type"></div>
+            </div>
+
+            <div class="question-stem" id="question-stem"></div>
+
+            <div id="choice-options" class="options"></div>
+
+            <div id="cloze-area" style="display: none;">
+                <div class="word-pool" id="word-pool"></div>
+                <div class="cloze-controls">
+                    <button class="btn btn-primary" id="submit-cloze">提交答案</button>
+                    <button class="btn btn-secondary" id="reset-cloze">重置本题</button>
+                </div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <div class="teacher-panel">
+            <button class="teacher-toggle" id="teacher-toggle">
+                <span id="toggle-icon">▶</span> 教师视角
+            </button>
+            <div class="teacher-content" id="teacher-content">
+                <div class="teacher-item">
+                    <strong>考查知识点：</strong><span id="teacher-knowledge"></span>
+                </div>
+                <div class="teacher-item">
+                    <strong>学生易错点：</strong><span id="teacher-pitfalls"></span>
+                </div>
+                <div class="teacher-item">
+                    <strong>解析要点：</strong><span id="teacher-explanation"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn">上一题</button>
+            <button class="nav-btn" id="next-btn">下一题</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // 第1题：选择题
+            {
+                type: "choice",
+                stem: "【基础概念】光的反射定律的内容是：反射光线、入射光线和法线在同一平面内，反射光线和入射光线分别位于法线两侧，下列说法正确的是：",
+                options: [
+                    "反射角大于入射角",
+                    "反射角等于入射角",
+                    "反射角小于入射角",
+                    "反射角与入射角无关"
+                ],
+                correctIndex: 1,
+                knowledgePoint: "光的反射定律核心内容：反射角等于入射角",
+                pitfalls: "学生可能记混大于、小于关系",
+                explanation: "反射定律明确规定：反射角等于入射角，这是光反射的基本规律"
+            },
+            // 第2题：填空题
+            {
+                type: "cloze",
+                stem: "【角度定义】入射角是指 ______ 与法线之间的夹角，反射角是指 ______ 与法线之间的夹角。",
+                blankId: "b1",
+                options: ["入射光线", "反射光线", "镜面", "物体"],
+                correctOption: "入射光线",
+                knowledgePoint: "入射角和反射角的定义（都是相对法线）",
+                pitfalls: "学生常误认为是光线与镜面的夹角",
+                explanation: "入射角和反射角都是光线与法线的夹角，不是与镜面的夹角"
+            },
+            // 第3题：选择题
+            {
+                type: "choice",
+                stem: "【角度计算】一束光线与平面镜成 30° 角射到镜面上，则入射角为：",
+                options: ["30°", "60°", "90°", "0°"],
+                correctIndex: 1,
+                knowledgePoint: "入射角与光线和镜面夹角的换算关系",
+                pitfalls: "学生常直接把与镜面夹角当成入射角",
+                explanation: "入射角是与法线夹角，法线垂直镜面，所以入射角 = 90° - 30° = 60°"
+            },
+            // 第4题：填空题
+            {
+                type: "cloze",
+                stem: "【三线关系】在光的反射中，反射光线、入射光线和法线 ______，反射光线和入射光线分别位于法线的 ______。",
+                blankId: "b2",
+                options: ["在同一平面内", "在不同平面内", "两侧", "同侧"],
+                correctOption: "在同一平面内",
+                knowledgePoint: "反射定律的完整表述：三线共面、法线两侧",
+                pitfalls: "学生常只记角度关系，忽略三线共面和两侧要求",
+                explanation: "完整的反射定律包括三个要点：三线共面、法线两侧、反射角=入射角"
+            },
+            // 第5题：选择题
+            {
+                type: "choice",
+                stem: "【平面镜成像】关于平面镜成像，下列说法错误的是：",
+                options: [
+                    "像与物体大小相等",
+                    "像与物体到镜面的距离相等",
+                    "像是实像，能用光屏承接",
+                    "像与物体关于镜面对称"
+                ],
+                correctIndex: 2,
+                knowledgePoint: "平面镜成虚像，不能用光屏承接",
+                pitfalls: "学生容易混淆虚像和实像",
+                explanation: "平面镜成的是虚像，由反射光线的反向延长线形成，不能用光屏承接"
+            },
+            // 第6题：填空题
+            {
+                type: "cloze",
+                stem: "【虚实像】平面镜所成的像是 ______ 像，它是由反射光线的 ______ 形成的。",
+                blankId: "b3",
+                options: ["虚", "实", "反向延长线", "实际光线"],
+                correctOption: "虚",
+                knowledgePoint: "虚像的定义和成像原理",
+                pitfalls: "学生对虚像概念理解不深",
+                explanation: "虚像是由反射光线的反向延长线会聚形成的，不是实际光线会聚"
+            },
+            // 第7题：选择题
+            {
+                type: "choice",
+                stem: "【镜面反射与漫反射】关于镜面反射和漫反射，下列说法正确的是：",
+                options: [
+                    "镜面反射遵守反射定律，漫反射不遵守",
+                    "镜面反射和漫反射都遵守反射定律",
+                    "只有平面镜才能发生镜面反射",
+                    "粗糙表面不会发生光的反射"
+                ],
+                correctIndex: 1,
+                knowledgePoint: "镜面反射和漫反射都遵守反射定律",
+                pitfalls: "学生误认为漫反射不遵守反射定律",
+                explanation: "两种反射都遵守反射定律，区别在于反射面粗糙程度不同，导致反射光方向不同"
+            },
+            // 第8题：填空题
+            {
+                type: "cloze",
+                stem: "【反射类型】光滑的平面镜表面发生 ______，使反射光线平行；粗糙的表面发生 ______，使反射光线向各个方向。",
+                blankId: "b4",
+                options: ["镜面反射", "漫反射", "折射", "直线传播"],
+                correctOption: "镜面反射",
+                knowledgePoint: "区分镜面反射和漫反射的表面特征",
+                pitfalls: "学生可能混淆两种反射的条件",
+                explanation: "光滑表面产生镜面反射（反射光平行），粗糙表面产生漫反射（反射光向各方向）"
+            },
+            // 第9题：选择题
+            {
+                type: "choice",
+                stem: "【作图规范】在光路图中，法线应该：",
+                options: [
+                    "用实线表示，带箭头",
+                    "用虚线表示，垂直于镜面，不带箭头",
+                    "用实线表示，垂直于入射光线",
+                    "可以任意画，没有要求"
+                ],
+                correctIndex: 1,
+                knowledgePoint: "光路图中法线的规范画法",
+                pitfalls: "学生作图时常把法线画成实线或忘记垂直",
+                explanation: "法线是辅助线，用虚线表示，垂直于镜面（反射面），不标箭头"
+            },
+            // 第10题：填空题
+            {
+                type: "cloze",
+                stem: "【光线表示】在光路图中，实际存在的光线（如入射光线、反射光线）应画成 ______，并用箭头表示光的 ______。",
+                blankId: "b5",
+                options: ["实线", "虚线", "传播方向", "速度"],
+                correctOption: "实线",
+                knowledgePoint: "光路图中实际光线的规范画法",
+                pitfalls: "学生可能把所有线都画成虚线",
+                explanation: "实际光线用实线+箭头，辅助线（法线、延长线）用虚线"
+            },
+            // 第11题：选择题
+            {
+                type: "choice",
+                stem: "【生活现象】下列现象中，利用光的反射原理的是：",
+                options: [
+                    "小孔成像",
+                    "照镜子看到自己的像",
+                    "放大镜看字",
+                    "日食现象"
+                ],
+                correctIndex: 1,
+                knowledgePoint: "识别生活中的光反射现象",
+                pitfalls: "学生可能与光的直线传播、折射混淆",
+                explanation: "照镜子是平面镜成像，属于光的反射。小孔成像和日食是直线传播，放大镜是折射"
+            },
+            // 第12题：填空题
+            {
+                type: "cloze",
+                stem: "【实验验证】在探究光的反射定律实验中，将纸板沿法线折叠，在纸板上看不到反射光线，说明反射光线、入射光线和法线 ______。",
+                blankId: "b6",
+                options: ["在同一平面内", "在不同平面内", "平行", "垂直"],
+                correctOption: "在同一平面内",
+                knowledgePoint: "实验验证三线共面的方法",
+                pitfalls: "学生不理解折叠纸板的实验意义",
+                explanation: "纸板折叠后，三线不再共面，所以看不到反射光线，证明了三线共面"
+            },
+            // 第13题：选择题
+            {
+                type: "choice",
+                stem: "【角度计算】入射角为 40°，则反射角为：",
+                options: ["20°", "40°", "80°", "50°"],
+                correctIndex: 1,
+                knowledgePoint: "反射角等于入射角的直接应用",
+                pitfalls: "学生可能进行多余的计算",
+                explanation: "根据反射定律，反射角 = 入射角 = 40°"
+            },
+            // 第14题：填空题
+            {
+                type: "cloze",
+                stem: "【距离关系】小明站在平面镜前 1.5 米处，他的像到镜面的距离是 ______米，像到小明的距离是 ______米。",
+                blankId: "b7",
+                options: ["1.5", "3", "0.75", "4.5"],
+                correctOption: "1.5",
+                knowledgePoint: "平面镜成像的等距性",
+                pitfalls: "学生容易混淆像到镜面和像到物的距离",
+                explanation: "像到镜面距离 = 物到镜面距离 = 1.5米，像到物距离 = 1.5×2 = 3米"
+            },
+            // 第15题：选择题
+            {
+                type: "choice",
+                stem: "【实验器材】探究平面镜成像特点时，用玻璃板代替平面镜的主要目的是：",
+                options: [
+                    "玻璃板比平面镜便宜",
+                    "玻璃板既能成像又能透光，便于确定像的位置",
+                    "玻璃板成像更清晰",
+                    "玻璃板不易破碎"
+                ],
+                correctIndex: 1,
+                knowledgePoint: "平面镜成像实验中玻璃板的作用",
+                pitfalls: "学生可能从价格等无关因素考虑",
+                explanation: "玻璃板既能反射成像，又能透光，便于观察像的位置并验证对称性"
+            },
+            // 第16题：填空题
+            {
+                type: "cloze",
+                stem: "【光路可逆】如果让光沿着反射光线的方向射入，它会沿着原来 ______ 的方向反射出去，这说明光路是 ______。",
+                blankId: "b8",
+                options: ["入射光线", "法线", "可逆的", "不可逆的"],
+                correctOption: "入射光线",
+                knowledgePoint: "光路可逆原理",
+                pitfalls: "学生对光路可逆理解不深",
+                explanation: "光路可逆：入射光线和反射光线可互换，光线会沿原路返回"
+            },
+            // 第17题：选择题
+            {
+                type: "choice",
+                stem: "【应用分析】电影屏幕做成白色且表面粗糙，其目的是：",
+                options: [
+                    "发生镜面反射，使光线集中",
+                    "发生漫反射，使各个方向都能看到画面",
+                    "吸收更多的光",
+                    "减少光的反射"
+                ],
+                correctIndex: 1,
+                knowledgePoint: "漫反射在生活中的应用",
+                pitfalls: "学生可能认为应该用镜面反射",
+                explanation: "屏幕粗糙使光发生漫反射，反射光向各方向传播，不同位置观众都能看到"
+            },
+            // 第18题：填空题
+            {
+                type: "cloze",
+                stem: "【成像大小】身高 1.7 米的人站在平面镜前，像的高度是 ______米。他向镜子走近，像的大小 ______（填"变大""变小"或"不变"）。",
+                blankId: "b9",
+                options: ["1.7", "3.4", "不变", "变大"],
+                correctOption: "1.7",
+                knowledgePoint: "平面镜成像大小恒等，不随距离变化",
+                pitfalls: "学生受日常经验影响，认为靠近会变大",
+                explanation: "平面镜成像特点之一是像与物等大，无论距离如何变化"
+            },
+            // 第19题：选择题
+            {
+                type: "choice",
+                stem: "【特殊情况】光线垂直射到平面镜上，则反射角为：",
+                options: ["0°", "45°", "90°", "180°"],
+                correctIndex: 0,
+                knowledgePoint: "垂直入射时的反射角（特殊情况）",
+                pitfalls: "学生可能认为是90°",
+                explanation: "垂直入射时入射角为0°，根据反射定律反射角也为0°，光沿原路返回"
+            },
+            // 第20题：填空题
+            {
+                type: "cloze",
+                stem: "【作图验证】用光路图验证光的反射定律时，需要测量入射角和反射角，测量时要以 ______ 为基准，用 ______ 测量角度。",
+                blankId: "b10",
+                options: ["法线", "镜面", "量角器", "直尺"],
+                correctOption: "法线",
+                knowledgePoint: "角度测量的基准和工具",
+                pitfalls: "学生可能以镜面为基准",
+                explanation: "入射角和反射角都是相对法线测量的，用量角器测量角度"
+            },
+            // 第21题：选择题
+            {
+                type: "choice",
+                stem: "【多次反射】两块平面镜垂直放置，一束光经过两次反射后，出射光线与入射光线的关系是：",
+                options: [
+                    "平行且同向",
+                    "平行且反向",
+                    "垂直",
+                    "无法确定"
+                ],
+                correctIndex: 1,
+                knowledgePoint: "多次反射的光路分析",
+                pitfalls: "学生对多次反射几何关系理解困难",
+                explanation: "两垂直镜面两次反射后，出射光线与入射光线平行反向"
+            },
+            // 第22题：填空题
+            {
+                type: "cloze",
+                stem: "【潜望镜】潜望镜是利用两块 ______ 放置的平面镜，让光线经过两次 ______，从而改变光的传播方向。",
+                blankId: "b11",
+                options: ["平行", "垂直", "反射", "折射"],
+                correctOption: "平行",
+                knowledgePoint: "潜望镜的光学原理",
+                pitfalls: "学生可能不清楚两镜子的位置关系",
+                explanation: "潜望镜用两块平行放置的平面镜，通过两次反射改变光路"
+            },
+            // 第23题：选择题
+            {
+                type: "choice",
+                stem: "【实验设计】在探究光反射定律的实验中，多次改变入射角度进行实验，这样做的目的是：",
+                options: [
+                    "减小测量误差",
+                    "使实验结论更具普遍性",
+                    "增加实验的复杂度",
+                    "便于画光路图"
+                ],
+                correctIndex: 1,
+                knowledgePoint: "多次实验寻找普遍规律",
+                pitfalls: "学生可能误认为是减小误差",
+                explanation: "改变条件多次实验是为了发现普遍规律，而非偶然现象"
+            },
+            // 第24题：填空题
+            {
+                type: "cloze",
+                stem: "【镜像理解】小明举起右手，在平面镜中看到的像举起的是 ______（填"左"或"右"）手。这是因为平面镜成像是关于镜面 ______ 的。",
+                blankId: "b12",
+                options: ["左", "右", "对称", "平行"],
+                correctOption: "左",
+                knowledgePoint: "平面镜成像的对称性导致左右对调",
+                pitfalls: "学生死记结论，不理解对称本质",
+                explanation: "平面镜成像是轴对称，从观察者角度看，像的左右与物体相反"
+            },
+            // 第25题：选择题
+            {
+                type: "choice",
+                stem: "【作图辨析】下列光路图的说法错误的是：",
+                options: [
+                    "实际光线用实线带箭头表示",
+                    "法线用虚线表示且垂直于反射面",
+                    "反射角可以大于入射角",
+                    "光线箭头表示光的传播方向"
+                ],
+                correctIndex: 2,
+                knowledgePoint: "光路图规范和反射定律",
+                pitfalls: "学生作图时可能随意画角度",
+                explanation: "根据反射定律，反射角必须等于入射角，不能大于或小于"
+            },
+            // 第26题：填空题
+            {
+                type: "cloze",
+                stem: "【镜面转动】保持入射光线方向不变，将平面镜绕入射点顺时针转动 10°，则反射光线会顺时针转动 ______°。",
+                blankId: "b13",
+                options: ["10", "20", "5", "0"],
+                correctOption: "20",
+                knowledgePoint: "镜面转动对反射光路的影响",
+                pitfalls: "学生可能认为也是10°",
+                explanation: "镜面转动θ角，法线也转θ角，导致入射角和反射角各变化θ，反射光线转动2θ"
+            },
+            // 第27题：选择题
+            {
+                type: "choice",
+                stem: "【综合应用】要在墙上的平面镜中看到自己的全身像，镜子的最小高度应该是人身高的：",
+                options: [
+                    "等于人的身高",
+                    "人身高的一半",
+                    "人身高的三分之一",
+                    "人身高的四分之一"
+                ],
+                correctIndex: 1,
+                knowledgePoint: "利用光的反射和几何关系求最小镜面高度",
+                pitfalls: "学生可能认为需要和人一样高",
+                explanation: "根据光的反射和几何关系，镜子高度只需人身高的一半即可看到全身"
+            },
+            // 第28题：填空题
+            {
+                type: "cloze",
+                stem: "【对称作图】在平面镜成像作图中，先找出物体各关键点关于镜面的 ______ 点，连接各对应点即可得到像。这利用了平面镜成像的 ______ 特点。",
+                blankId: "b14",
+                options: ["对称", "垂直", "对称性", "等大性"],
+                correctOption: "对称",
+                knowledgePoint: "平面镜成像作图的对称法",
+                pitfalls: "学生作图可能不规范，不会用对称性",
+                explanation: "平面镜成像本质是轴对称，作出对称点即可快速准确作图"
+            },
+            // 第29题：选择题
+            {
+                type: "choice",
+                stem: "【综合判断】关于光的反射，下列说法错误的是：",
+                options: [
+                    "我们能看到不发光的物体，是因为光在物体表面发生了反射",
+                    "镜面反射和漫反射都遵守光的反射定律",
+                    "平面镜成的像可以用光屏承接",
+                    "反射现象中光路是可逆的"
+                ],
+                correctIndex: 2,
+                knowledgePoint: "光反射相关概念的综合辨析",
+                pitfalls: "学生容易混淆虚像和实像",
+                explanation: "平面镜成虚像，不能用光屏承接。其他三项都正确"
+            },
+            // 第30题：填空题
+            {
+                type: "cloze",
+                stem: "【综合理解】课堂上，我们能从各个方向看到黑板上的字，是因为光在黑板表面发生了 ______；而黑板"反光"刺眼，是因为发生了 ______。",
+                blankId: "b15",
+                options: ["漫反射", "镜面反射", "折射", "吸收"],
+                correctOption: "漫反射",
+                knowledgePoint: "区分漫反射和镜面反射的实际应用",
+                pitfalls: "学生可能两种反射分不清",
+                explanation: "粗糙表面（黑板字迹）产生漫反射，各方向可见；光滑表面产生镜面反射，刺眼反光"
+            }
+        ];
+
+        let currentIndex = 0;
+        let draggedWord = null;
+
+        // 初始化
+        function init() {
+            updateQuestion();
+            updateProgress();
+            updateNavButtons();
+        }
+
+        // 更新题目显示
+        function updateQuestion() {
+            const q = questions[currentIndex];
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback';
+
+            document.getElementById('question-number').textContent = `第 ${currentIndex + 1} 题`;
+            document.getElementById('current-question').textContent = currentIndex + 1;
+            document.getElementById('question-stem').innerHTML = q.stem.replace(/______/g,
+                `<span class="blank" id="${q.blankId || 'blank'}" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></span>`);
+
+            // 更新题型标签
+            const typeElement = document.getElementById('question-type');
+            if (q.type === 'choice') {
+                typeElement.textContent = '选择题';
+                typeElement.className = 'question-type type-choice';
+            } else {
+                typeElement.textContent = '选词填空';
+                typeElement.className = 'question-type type-cloze';
+            }
+
+            // 更新教师视角
+            document.getElementById('teacher-knowledge').textContent = q.knowledgePoint;
+            document.getElementById('teacher-pitfalls').textContent = q.pitfalls;
+            document.getElementById('teacher-explanation').textContent = q.explanation;
+
+            // 显示对应题型
+            if (q.type === 'choice') {
+                showChoice(q);
+            } else {
+                showCloze(q);
+            }
+        }
+
+        // 显示选择题
+        function showChoice(q) {
+            document.getElementById('choice-options').style.display = 'grid';
+            document.getElementById('cloze-area').style.display = 'none';
+
+            const optionsContainer = document.getElementById('choice-options');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => checkChoice(index, q.correctIndex, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // 检查选择题答案
+        function checkChoice(selected, correct, btn) {
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.classList.add('disabled'));
+
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback show';
+
+            if (selected === correct) {
+                btn.classList.add('correct');
+                feedback.className = 'feedback show correct';
+                feedback.textContent = '✅ 回答正确！干得漂亮！';
+            } else {
+                btn.classList.add('wrong');
+                allBtns[correct].classList.add('correct');
+                feedback.className = 'feedback show wrong';
+                feedback.textContent = '❌ 再想一想刚才的知识点，看看哪里理解有偏差。';
+            }
+        }
+
+        // 显示选词填空题
+        function showCloze(q) {
+            document.getElementById('choice-options').style.display = 'none';
+            document.getElementById('cloze-area').style.display = 'block';
+
+            const wordPool = document.getElementById('word-pool');
+            wordPool.innerHTML = '';
+
+            q.options.forEach(word => {
+                const tag = document.createElement('div');
+                tag.className = 'word-tag';
+                tag.textContent = word;
+                tag.draggable = true;
+                tag.ondragstart = (e) => dragStart(e, word);
+                wordPool.appendChild(tag);
+            });
+        }
+
+        // 拖拽开始
+        function dragStart(e, word) {
+            draggedWord = word;
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        // 允许放置
+        function allowDrop(e) {
+            e.preventDefault();
+            e.target.classList.add('drop-over');
+        }
+
+        // 拖拽离开
+        function dragLeave(e) {
+            e.target.classList.remove('drop-over');
+        }
+
+        // 放置
+        function drop(e) {
+            e.preventDefault();
+            e.target.classList.remove('drop-over');
+            if (draggedWord && e.target.classList.contains('blank')) {
+                e.target.textContent = draggedWord;
+                e.target.classList.add('filled');
+
+                // 标记词语为已使用
+                const tags = document.querySelectorAll('.word-tag');
+                tags.forEach(tag => {
+                    if (tag.textContent === draggedWord) {
+                        tag.classList.add('used');
+                        tag.draggable = false;
+                    }
+                });
+            }
+        }
+
+        // 提交填空答案
+        document.getElementById('submit-cloze').onclick = function() {
+            const q = questions[currentIndex];
+            const blank = document.getElementById(q.blankId);
+            const userAnswer = blank.textContent.trim();
+
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback show';
+
+            if (userAnswer === q.correctOption) {
+                feedback.className = 'feedback show correct';
+                feedback.textContent = '✅ 回答正确！干得漂亮！';
+            } else {
+                feedback.className = 'feedback show wrong';
+                feedback.textContent = `❌ 再想一想，正确答案是"${q.correctOption}"。`;
+            }
+
+            // 禁用词语拖拽
+            const tags = document.querySelectorAll('.word-tag');
+            tags.forEach(tag => tag.draggable = false);
+        };
+
+        // 重置填空题
+        document.getElementById('reset-cloze').onclick = function() {
+            const q = questions[currentIndex];
+            const blank = document.getElementById(q.blankId);
+            blank.textContent = '';
+            blank.classList.remove('filled');
+
+            const tags = document.querySelectorAll('.word-tag');
+            tags.forEach(tag => {
+                tag.classList.remove('used');
+                tag.draggable = true;
+            });
+
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback';
+        };
+
+        // 更新进度条
+        function updateProgress() {
+            const progress = ((currentIndex + 1) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        // 更新导航按钮
+        function updateNavButtons() {
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').disabled = currentIndex === questions.length - 1;
+        }
+
+        // 上一题
+        document.getElementById('prev-btn').onclick = function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateQuestion();
+                updateProgress();
+                updateNavButtons();
+            }
+        };
+
+        // 下一题
+        document.getElementById('next-btn').onclick = function() {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                updateQuestion();
+                updateProgress();
+                updateNavButtons();
+            }
+        };
+
+        // 教师视角切换
+        document.getElementById('teacher-toggle').onclick = function() {
+            const content = document.getElementById('teacher-content');
+            const icon = document.getElementById('toggle-icon');
+
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                icon.textContent = '▶';
+            } else {
+                content.classList.add('show');
+                icon.textContent = '▼';
+            }
+        };
+
+        // 页面加载完成后初始化
+        window.onload = init;
+    </script>
+</body>
+</html>
