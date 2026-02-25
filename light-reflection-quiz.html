@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光的反射 - 专项突破训练</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.35);
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            color: white;
+            padding: 35px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="none" stroke="white" stroke-width="2" opacity="0.1"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header .subtitle {
+            font-size: 15px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .meta {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.25);
+            height: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+
+        .question-area {
+            padding: 45px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .question-number {
+            font-size: 20px;
+            color: #6366f1;
+            font-weight: 800;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .type-choice {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .type-cloze {
+            background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+            color: white;
+        }
+
+        .question-stem {
+            font-size: 19px;
+            line-height: 1.9;
+            margin-bottom: 28px;
+            color: #1f2937;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+            border-left: 4px solid #6366f1;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 130px;
+            border-bottom: 3px dashed #6366f1;
+            padding: 4px 12px;
+            margin: 0 6px;
+            text-align: center;
+            color: #6366f1;
+            font-weight: bold;
+            min-height: 28px;
+            vertical-align: bottom;
+            transition: all 0.3s;
+        }
+
+        .blank.filled {
+            background: linear-gradient(135deg, #e0e7ff 0%, #ddd6fe 100%);
+            border-radius: 6px;
+            border-bottom: 3px solid #6366f1;
+        }
+
+        .blank.drop-over {
+            background: #c7d2fe;
+            transform: scale(1.08);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .options {
+            display: grid;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .option-btn {
+            padding: 18px 24px;
+            border: 3px solid #e5e7eb;
+            border-radius: 14px;
+            background: white;
+            cursor: pointer;
+            font-size: 17px;
+            text-align: left;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .option-btn:hover {
+            border-color: #6366f1;
+            background: linear-gradient(135deg, #f5f7ff 0%, #faf5ff 100%);
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .option-btn:hover::before {
+            left: 100%;
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            border-color: #22c55e;
+            color: white;
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .option-btn.wrong {
+            background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+            border-color: #ef4444;
+            color: white;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .option-btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .word-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+            border: 2px dashed #d1d5db;
+        }
+
+        .word-tag {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border-radius: 30px;
+            cursor: move;
+            user-select: none;
+            font-size: 16px;
+            transition: all 0.25s;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .word-tag:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.5);
+        }
+
+        .word-tag.used {
+            opacity: 0.35;
+            cursor: not-allowed;
+            transform: scale(0.95);
+        }
+
+        .cloze-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin: 22px 0;
+            padding: 22px 26px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: bold;
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 3px solid #22c55e;
+            color: #065f46;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .feedback.wrong {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 3px solid #ef4444;
+            color: #991b1b;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .teacher-panel {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-top: 3px solid #e5e7eb;
+            padding: 25px 45px;
+        }
+
+        .teacher-toggle {
+            background: none;
+            border: none;
+            color: #6366f1;
+            font-size: 17px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .teacher-toggle:hover {
+            color: #8b5cf6;
+            transform: translateX(5px);
+        }
+
+        .teacher-content {
+            margin-top: 18px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .teacher-content.show {
+            display: block;
+        }
+
+        .teacher-item {
+            margin-bottom: 14px;
+            line-height: 1.7;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #6366f1;
+        }
+
+        .teacher-item strong {
+            color: #6366f1;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 45px;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 14px 28px;
+            border: 3px solid #6366f1;
+            background: white;
+            color: #6366f1;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: all 0.25s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .question-area {
+                padding: 30px 20px;
+            }
+            .header {
+                padding: 25px 20px;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+            .navigation {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💡 光的反射 - 专项突破训练</h1>
+            <div class="subtitle">掌握反射定律 · 攻克平面镜成像 · 规范光路作图</div>
+            <div class="meta">
+                第 <span id="current-question">1</span> 题 / 共 <span id="total-questions">30</span> 题
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="question-area">
+            <div class="question-header">
+                <div class="question-number" id="question-number">第 1 题</div>
+                <div class="question-type" id="question-type"></div>
+            </div>
+
+            <div class="question-stem" id="question-stem"></div>
+
+            <div id="choice-options" class="options"></div>
+
+            <div id="cloze-area" style="display: none;">
+                <div class="word-pool" id="word-pool"></div>
+                <div class="cloze-controls">
+                    <button class="btn btn-primary" id="submit-cloze">✓ 提交答案</button>
+                    <button class="btn btn-secondary" id="reset-cloze">↻ 重置本题</button>
+                </div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <div class="teacher-panel">
+            <button class="teacher-toggle" id="teacher-toggle">
+                <span id="toggle-icon">▶</span> 📖 教师视角（点击查看解析）
+            </button>
+            <div class="teacher-content" id="teacher-content">
+                <div class="teacher-item">
+                    <strong>📌 考查知识点</strong><span id="teacher-knowledge"></span>
+                </div>
+                <div class="teacher-item">
+                    <strong>⚠️ 学生易错点</strong><span id="teacher-pitfalls"></span>
+                </div>
+                <div class="teacher-item">
+                    <strong>💡 解析要点</strong><span id="teacher-explanation"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn">← 上一题</button>
+            <button class="nav-btn" id="next-btn">下一题 →</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {type:"choice",stem:"【反射定律】光的反射定律规定：反射角 ______ 入射角。",options:["大于","等于","小于","不确定"],correctIndex:1,knowledgePoint:"反射定律核心：反射角等于入射角",pitfalls:"学生可能记混大于小于关系",explanation:"反射定律明确规定反射角等于入射角，这是光反射的基本规律"},
+            {type:"cloze",stem:"【角度定义】入射角是 ______ 与法线的夹角，反射角是 ______ 与法线的夹角。",blankId:"b1",options:["入射光线","反射光线","镜面","物体"],correctOption:"入射光线",knowledgePoint:"入射角和反射角都是相对法线测量",pitfalls:"学生常误认为是与镜面的夹角",explanation:"入射角和反射角都是光线与法线的夹角"},
+            {type:"choice",stem:"【角度换算】一束光与平面镜成30°角入射，则入射角为：",options:["30°","60°","90°","45°"],correctIndex:1,knowledgePoint:"入射角与镜面夹角的换算",pitfalls:"直接把与镜面夹角当入射角",explanation:"入射角=90°-30°=60°（法线垂直镜面）"},
+            {type:"cloze",stem:"【三线关系】反射光线、入射光线、法线在 ______，且反射光线和入射光线分居法线 ______。",blankId:"b2",options:["同一平面内","两侧","同侧","不同平面"],correctOption:"同一平面内",knowledgePoint:"反射定律：三线共面、法线两侧",pitfalls:"学生常忽略三线共面要求",explanation:"完整反射定律包括三线共面、法线两侧、角度相等"},
+            {type:"choice",stem:"【平面镜成像】平面镜所成的像是：",options:["实像，能用光屏承接","虚像，不能用光屏承接","实像，不能用光屏承接","虚像，能用光屏承接"],correctIndex:1,knowledgePoint:"平面镜成虚像",pitfalls:"混淆虚像和实像",explanation:"平面镜成虚像，由反射光线反向延长线形成"},
+            {type:"cloze",stem:"【像的性质】平面镜成的像与物体大小 ______，到镜面距离 ______。",blankId:"b3",options:["相等","不等","相等","不等"],correctOption:"相等",knowledgePoint:"平面镜成像：等大等距",pitfalls:"认为距离变化像会变大或变小",explanation:"平面镜成像特点：等大、等距、对称"},
+            {type:"choice",stem:"【反射类型】镜面反射和漫反射的说法正确的是：",options:["只有镜面反射遵守反射定律","只有漫反射遵守反射定律","都遵守反射定律","都不遵守反射定律"],correctIndex:2,knowledgePoint:"两种反射都遵守反射定律",pitfalls:"误认为漫反射不遵守定律",explanation:"区别在于表面粗糙度，都遵守反射定律"},
+            {type:"cloze",stem:"【反射应用】平滑镜面发生 ______，粗糙表面发生 ______。",blankId:"b4",options:["镜面反射","漫反射","折射","吸收"],correctOption:"镜面反射",knowledgePoint:"表面性质决定反射类型",pitfalls:"可能混淆两种反射条件",explanation:"光滑→镜面反射，粗糙→漫反射"},
+            {type:"choice",stem:"【作图规范】光路图中法线应该：",options:["实线，带箭头","虚线，不带箭头，垂直镜面","实线，不带箭头","虚线，带箭头"],correctIndex:1,knowledgePoint:"法线的规范画法",pitfalls:"把法线画成实线",explanation:"法线是辅助线，用虚线，垂直镜面"},
+            {type:"cloze",stem:"【光线表示】实际光线用 ______ 表示，辅助线用 ______ 表示。",blankId:"b5",options:["实线","虚线","箭头","点"],correctOption:"实线",knowledgePoint:"光路图中线的规范",pitfalls:"可能都画成虚线",explanation:"实际光线用实线+箭头，辅助线用虚线"},
+            {type:"choice",stem:"【生活应用】下列利用光反射的是：",options:["小孔成像","水中看到岸上树的倒影","放大镜","彩虹"],correctIndex:1,knowledgePoint:"识别生活中的反射现象",pitfalls:"与直线传播、折射混淆",explanation:"水面成像是平面镜成像，属于反射"},
+            {type:"cloze",stem:"【实验验证】探究反射定律时，折叠纸板后看不到反射光线，说明三线 ______。",blankId:"b6",options:["共面","不共面","平行","垂直"],correctOption:"共面",knowledgePoint:"实验验证三线共面",pitfalls:"不理解折叠实验意义",explanation:"折叠后不共面，所以看不到，证明三线共面"},
+            {type:"choice",stem:"【角度计算】入射角40°，反射角为：",options:["20°","40°","80°","50°"],correctIndex:1,knowledgePoint:"反射角=入射角",pitfalls:"进行多余计算",explanation:"根据反射定律直接相等"},
+            {type:"cloze",stem:"【距离关系】物体距镜2米，像距镜 ______ 米，像与物相距 ______ 米。",blankId:"b7",options:["2","4","1","3"],correctOption:"2",knowledgePoint:"等距性和对称性",pitfalls:"混淆像到镜和像到物距离",explanation:"像距镜=物距镜=2米，像物距=4米"},
+            {type:"choice",stem:"【实验器材】平面镜成像实验用玻璃板目的是：",options:["便宜","既能成像又透光，便于定位","更清晰","不易碎"],correctIndex:1,knowledgePoint:"玻璃板的作用",pitfalls:"从无关因素考虑",explanation:"玻璃板既反射又透光，便于确定像位置"},
+            {type:"cloze",stem:"【光路可逆】光沿反射光线入射，会沿原 ______ 方向反射，说明光路 ______。",blankId:"b8",options:["入射光线","法线","可逆","不可逆"],correctOption:"入射光线",knowledgePoint:"光路可逆原理",pitfalls:"对可逆理解不深",explanation:"入射反射光线可互换，光沿原路返回"},
+            {type:"choice",stem:"【应用分析】电影屏幕粗糙是为了：",options:["镜面反射集中光线","漫反射让各方向看到","吸收光","减少反射"],correctIndex:1,knowledgePoint:"漫反射应用",pitfalls:"可能认为用镜面反射",explanation:"粗糙产生漫反射，各角度观众都能看到"},
+            {type:"cloze",stem:"【大小变化】身高1.7米的人，像高 ______ 米。向镜走近，像 ______（填"变大""不变"）。",blankId:"b9",options:["1.7","3.4","不变","变大"],correctOption:"1.7",knowledgePoint:"像的大小恒等",pitfalls:"认为靠近会变大",explanation:"平面镜成像等大，不随距离变化"},
+            {type:"choice",stem:"【特殊情况】光垂直射向镜面，反射角为：",options:["0°","45°","90°","180°"],correctIndex:0,knowledgePoint:"垂直入射的反射角",pitfalls:"可能认为是90°",explanation:"垂直入射入射角0°，反射角0°，原路返回"},
+            {type:"cloze",stem:"【测量基准】测量入射角和反射角要以 ______ 为基准，用 ______ 测量。",blankId:"b10",options:["法线","镜面","量角器","直尺"],correctOption:"法线",knowledgePoint:"角度测量方法",pitfalls:"可能以镜面为基准",explanation:"角度相对法线测量，用量角器"},
+            {type:"choice",stem:"【多次反射】两块垂直镜面两次反射后，出射光与入射光：",options:["同向平行","反向平行","垂直","重合"],correctIndex:1,knowledgePoint:"多次反射光路",pitfalls:"几何关系理解困难",explanation:"两垂直镜面反射后，出射光与入射光平行反向"},
+            {type:"cloze",stem:"【潜望镜】潜望镜用两块 ______ 的平面镜，通过两次 ______。",blankId:"b11",options:["平行放置","垂直放置","反射","折射"],correctOption:"平行放置",knowledgePoint:"潜望镜原理",pitfalls:"不清楚镜子位置关系",explanation:"两块平行镜面，两次反射改变光路"},
+            {type:"choice",stem:"【实验设计】多次改变入射角实验的目的：",options:["减小误差","得出普遍规律","增加难度","便于作图"],correctIndex:1,knowledgePoint:"多次实验寻找规律",pitfalls:"误认为减小误差",explanation:"改变条件多次实验是为寻找普遍规律"},
+            {type:"cloze",stem:"【镜像现象】举右手，镜中像举 ______（填"左"或"右"）手，因为镜像关于镜面 ______。",blankId:"b12",options:["左","右","对称","旋转"],correctOption:"左",knowledgePoint:"左右对调源于对称性",pitfalls:"死记结论不理解本质",explanation:"镜像是轴对称，观察者视角下左右相反"},
+            {type:"choice",stem:"【作图错误】下列说法错误的是：",options:["实际光线用实线","法线用虚线垂直镜面","反射角可大于入射角","箭头表示光传播方向"],correctIndex:2,knowledgePoint:"反射定律和作图规范",pitfalls:"作图时随意画角度",explanation:"反射角必须等于入射角"},
+            {type:"cloze",stem:"【镜面转动】入射光线不变，镜面转10°，反射光线转 ______°。",blankId:"b13",options:["10","20","5","0"],correctOption:"20",knowledgePoint:"镜面转动对光路影响",pitfalls:"可能认为也是10°",explanation:"镜面转θ，法线转θ，反射光线转2θ"},
+            {type:"choice",stem:"【最小镜面】要看到全身像，镜子最小高度是身高的：",options:["全高","一半","三分之一","四分之一"],correctIndex:1,knowledgePoint:"利用几何求最小镜高",pitfalls:"认为需要全高",explanation:"根据光的反射和几何，镜高只需身高一半"},
+            {type:"cloze",stem:"【对称作图】平面镜作图先找物体关键点的 ______ 点，利用 ______ 性。",blankId:"b14",options:["对称","垂直","对称性","等大性"],correctOption:"对称",knowledgePoint:"作图对称法",pitfalls:"作图不规范不会用对称",explanation:"平面镜成像是轴对称，找对称点快速作图"},
+            {type:"choice",stem:"【综合判断】下列错误的是：",options:["看到不发光物体因为反射","镜面漫反射都遵守定律","平面镜成像可用屏接收","反射光路可逆"],correctIndex:2,knowledgePoint:"综合概念辨析",pitfalls:"混淆虚像实像",explanation:"平面镜成虚像不能用屏承接"},
+            {type:"cloze",stem:"【综合应用】看到黑板字是 ______，黑板反光刺眼是 ______。",blankId:"b15",options:["漫反射","镜面反射","折射","直线传播"],correctOption:"漫反射",knowledgePoint:"区分两种反射应用",pitfalls:"两种反射分不清",explanation:"粗糙表面漫反射可见，光滑表面镜面反射刺眼"}
+        ];
+
+        let currentIndex = 0;
+        let draggedWord = null;
+
+        function init() {
+            updateQuestion();
+            updateProgress();
+            updateNavButtons();
+        }
+
+        function updateQuestion() {
+            const q = questions[currentIndex];
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('question-number').textContent = `第 ${currentIndex + 1} 题`;
+            document.getElementById('current-question').textContent = currentIndex + 1;
+            document.getElementById('question-stem').innerHTML = q.stem.replace(/______/g,
+                `<span class="blank" id="${q.blankId || 'blank'}" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></span>`);
+
+            const typeElement = document.getElementById('question-type');
+            if (q.type === 'choice') {
+                typeElement.textContent = '选择题';
+                typeElement.className = 'question-type type-choice';
+            } else {
+                typeElement.textContent = '选词填空';
+                typeElement.className = 'question-type type-cloze';
+            }
+
+            document.getElementById('teacher-knowledge').textContent = q.knowledgePoint;
+            document.getElementById('teacher-pitfalls').textContent = q.pitfalls;
+            document.getElementById('teacher-explanation').textContent = q.explanation;
+
+            if (q.type === 'choice') {
+                showChoice(q);
+            } else {
+                showCloze(q);
+            }
+        }
+
+        function showChoice(q) {
+            document.getElementById('choice-options').style.display = 'grid';
+            document.getElementById('cloze-area').style.display = 'none';
+            const container = document.getElementById('choice-options');
+            container.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => checkChoice(idx, q.correctIndex, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkChoice(selected, correct, btn) {
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.classList.add('disabled'));
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback show';
+            if (selected === correct) {
+                btn.classList.add('correct');
+                feedback.className = 'feedback show correct';
+                feedback.textContent = '✅ 回答正确！太棒了！';
+            } else {
+                btn.classList.add('wrong');
+                allBtns[correct].classList.add('correct');
+                feedback.className = 'feedback show wrong';
+                feedback.textContent = '❌ 再想一想，看看哪里理解有偏差。';
+            }
+        }
+
+        function showCloze(q) {
+            document.getElementById('choice-options').style.display = 'none';
+            document.getElementById('cloze-area').style.display = 'block';
+            const pool = document.getElementById('word-pool');
+            pool.innerHTML = '';
+            q.options.forEach(word => {
+                const tag = document.createElement('div');
+                tag.className = 'word-tag';
+                tag.textContent = word;
+                tag.draggable = true;
+                tag.ondragstart = (e) => { draggedWord = word; e.dataTransfer.effectAllowed = 'move'; };
+                pool.appendChild(tag);
+            });
+        }
+
+        function allowDrop(e) {
+            e.preventDefault();
+            e.target.classList.add('drop-over');
+        }
+
+        function dragLeave(e) {
+            e.target.classList.remove('drop-over');
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            e.target.classList.remove('drop-over');
+            if (draggedWord && e.target.classList.contains('blank')) {
+                e.target.textContent = draggedWord;
+                e.target.classList.add('filled');
+                document.querySelectorAll('.word-tag').forEach(tag => {
+                    if (tag.textContent === draggedWord) {
+                        tag.classList.add('used');
+                        tag.draggable = false;
+                    }
+                });
+            }
+        }
+
+        document.getElementById('submit-cloze').onclick = function() {
+            const q = questions[currentIndex];
+            const blank = document.getElementById(q.blankId);
+            const userAnswer = blank.textContent.trim();
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback show';
+            if (userAnswer === q.correctOption) {
+                feedback.className = 'feedback show correct';
+                feedback.textContent = '✅ 回答正确！太棒了！';
+            } else {
+                feedback.className = 'feedback show wrong';
+                feedback.textContent = `❌ 正确答案是"${q.correctOption}"`;
+            }
+            document.querySelectorAll('.word-tag').forEach(tag => tag.draggable = false);
+        };
+
+        document.getElementById('reset-cloze').onclick = function() {
+            const q = questions[currentIndex];
+            const blank = document.getElementById(q.blankId);
+            blank.textContent = '';
+            blank.classList.remove('filled');
+            document.querySelectorAll('.word-tag').forEach(tag => {
+                tag.classList.remove('used');
+                tag.draggable = true;
+            });
+            document.getElementById('feedback').className = 'feedback';
+        };
+
+        function updateProgress() {
+            const progress = ((currentIndex + 1) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').disabled = currentIndex === questions.length - 1;
+        }
+
+        document.getElementById('prev-btn').onclick = () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateQuestion();
+                updateProgress();
+                updateNavButtons();
+            }
+        };
+
+        document.getElementById('next-btn').onclick = () => {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                updateQuestion();
+                updateProgress();
+                updateNavButtons();
+            }
+        };
+
+        document.getElementById('teacher-toggle').onclick = function() {
+            const content = document.getElementById('teacher-content');
+            const icon = document.getElementById('toggle-icon');
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                icon.textContent = '▶';
+            } else {
+                content.classList.add('show');
+                icon.textContent = '▼';
+            }
+        };
+
+        window.onload = init;
+    </script>
+</body>
+</html>
